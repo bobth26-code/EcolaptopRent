@@ -552,11 +552,9 @@ app.post("/seller/product", (req, res) => {
 
     const { name, description, category, price, stock, image } = req.body;
 
-    // 🔥 DEBUG LOGS
     console.log("SESSION:", req.session.user);
     console.log("BODY:", req.body);
 
-    // 🔥 VALIDATION
     if (!name || !category || !price) {
         return res.status(400).json({
             success:false,
@@ -604,12 +602,18 @@ app.get("/seller/products", (req, res) => {
         SELECT *
         FROM products
         WHERE seller_id = ?
-        ORDER BY created_at DESC
+        ORDER BY id DESC
     `;
 
     db.query(sql, [req.session.user.id], (err, rows) => {
 
-        if (err) return res.json({ success:false });
+        if (err) {
+            console.error("FETCH ERROR:", err);
+            return res.status(500).json({
+                success: false,
+                error: err.message
+            });
+        }
 
         res.json({
             success:true,
@@ -618,7 +622,6 @@ app.get("/seller/products", (req, res) => {
 
     });
 });
-
 
 
 /* ================= UPDATE PRODUCT ================= */
