@@ -427,18 +427,18 @@ color:#f3f4f6;
 <body>
     <script>
 
-        fetch(BASE_URL + "/me", { credentials: "include" })
-            .then(r => r.json())
-            .then(d => {
+        // fetch(BASE_URL + "/me", { credentials: "include" })
+        //     .then(r => r.json())
+        //     .then(d => {
 
-                if (!d.loggedIn || d.user.role !== "seller") {
-                    window.location.href = "index.html";
-                }
+        //         if (!d.loggedIn || d.user.role !== "seller") {
+        //             window.location.href = "index.html";
+        //         }
 
-            })
-            .catch(() => {
-                window.location.href = "index.html";
-            });
+        //     })
+        //     .catch(() => {
+        //         window.location.href = "index.html";
+        //     });
 
     </script>
     <!-- NAVBAR -->
@@ -765,9 +765,9 @@ Delete
 
     <script>
 
-
-document.addEventListener("DOMContentLoaded", () => {
 const BASE_URL = "https://rentgo-m25u.onrender.com";
+document.addEventListener("DOMContentLoaded", () => {
+
     /* ================= AUTH CHECK ================= */
 
     fetch(BASE_URL + "/me", { credentials: "include" })
