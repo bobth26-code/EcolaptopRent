@@ -1308,7 +1308,7 @@ app.get("/logout", (req, res) => {
 
 /* ================= START ================= */
 app.listen(PORT, () => {
-    console.log(`🚀 Server running at http://localhost:${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
 /* ================= LAPTOP PRODUCTS ================= */
 
