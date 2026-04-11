@@ -501,11 +501,11 @@ color:#f3f4f6;
 
             <textarea id="description" placeholder="Description"></textarea>
 
-            <input type="number" id="price" placeholder="Price">
+   <input type="number" id="price" placeholder="Price" required>
 
-            <input type="number" id="stock" placeholder="Stock">
+<input type="number" id="stock" placeholder="Stock" required>
 
-            <input id="image" placeholder="Image URL">
+<input id="image" placeholder="Image URL" required>
 
             <button type="submit">Save Product</button>
 
@@ -517,7 +517,7 @@ color:#f3f4f6;
 
     </div>
 
-    <script>
+    <!-- <script>
 
         document.addEventListener("DOMContentLoaded", () => {
 
@@ -759,8 +759,141 @@ Delete
             navButtons[2].classList.add("active");
         }
 
-    </script>
+    </script> -->
 
+
+
+    <script>
+const BASE_URL = "https://rentgo-m25u.onrender.com";
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ================= AUTH CHECK ================= */
+
+    fetch(BASE_URL + "/me", { credentials: "include" })
+        .then(r => r.json())
+        .then(d => {
+
+            if (!d.loggedIn || d.user.role !== "seller") {
+                location = "/";
+                return;
+            }
+
+            const sellerName = document.getElementById("sellerName");
+            if (sellerName) {
+                sellerName.textContent = d.user.full_name;
+            }
+
+        });
+
+    /* ================= LOAD PRODUCTS ================= */
+
+    async function loadProducts() {
+
+        const r = await fetch(BASE_URL + "/seller/products", {
+            credentials: "include"
+        });
+
+        const text = await r.text();
+
+        let d;
+        try {
+            d = JSON.parse(text);
+        } catch (e) {
+            console.error("❌ Not JSON:", text);
+            return;
+        }
+
+        const box = document.getElementById("productList");
+        box.innerHTML = "";
+
+        if (!d.success) {
+            box.innerHTML = "No products";
+            return;
+        }
+
+        d.products.forEach(p =>box.innerHTML += `
+<div class="product-card">
+
+<img src="${p.image}">
+
+<h3>${p.name}</h3>
+
+<p>${p.description}</p>
+
+<p><b>Category:</b> ${p.category}</p>
+
+₹${p.price} | Stock ${p.stock}
+
+</div>
+`);
+    }
+
+    /* ================= SAVE PRODUCT ================= */
+
+    document.getElementById("productForm").onsubmit = async function (e) {
+
+        e.preventDefault();
+
+        const id = document.getElementById("productId").value;
+
+        const body = {
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            category: document.getElementById("category").value,
+            price: document.getElementById("price").value,
+            stock: document.getElementById("stock").value,
+            image: document.getElementById("image").value
+        };
+
+        const url = id
+            ? BASE_URL + "/seller/product/" + id
+            : BASE_URL + "/seller/product";
+
+        const method = id ? "PUT" : "POST";
+
+        await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        this.reset();
+        document.getElementById("productId").value = "";
+
+        loadProducts();
+    };
+
+    /* ================= DELETE ================= */
+
+    window.deleteProduct = async function (id) {
+
+        if (!confirm("Delete product?")) return;
+
+        await fetch(BASE_URL + "/seller/product/" + id, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        loadProducts();
+    }
+
+    /* ================= INIT ================= */
+
+    loadProducts();
+
+});
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+    fetch(BASE_URL + "/logout", { credentials: "include" })
+        .then(() => {
+            window.location.href = "/index.html";
+        });
+}
+</script>
 </body>
 
 </html>
