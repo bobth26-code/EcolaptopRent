@@ -552,6 +552,18 @@ app.post("/seller/product", (req, res) => {
 
     const { name, description, category, price, stock, image } = req.body;
 
+    // 🔥 DEBUG LOGS
+    console.log("SESSION:", req.session.user);
+    console.log("BODY:", req.body);
+
+    // 🔥 VALIDATION
+    if (!name || !category || !price) {
+        return res.status(400).json({
+            success:false,
+            error:"Missing required fields"
+        });
+    }
+
     const sql = `
         INSERT INTO products
         (seller_id, name, description, category, price, stock, image)
@@ -561,24 +573,25 @@ app.post("/seller/product", (req, res) => {
     db.query(sql, [
         req.session.user.id,
         name,
-        description,
+        description || "",
         category,
         price,
         stock || 1,
-        image
+        image || ""
     ], (err) => {
 
         if (err) {
-            console.error(err);
-            return res.json({ success:false });
+            console.error("INSERT ERROR:", err);
+            return res.status(500).json({
+                success:false,
+                error: err.message
+            });
         }
 
         res.json({ success:true });
 
     });
 });
-
-
 
 /* ================= SELLER VIEW PRODUCTS ================= */
 app.get("/seller/products", (req, res) => {
