@@ -427,7 +427,7 @@ color:#f3f4f6;
 <body>
     <script>
 
-        fetch("/me", { credentials: "include" })
+        fetch(BASE_URL + "/me", { credentials: "include" })
             .then(r => r.json())
             .then(d => {
 
