@@ -516,7 +516,7 @@ color:#f3f4f6;
         <div id="productList"></div>
 
     </div>
-
+<!-- 
     <script>
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -759,8 +759,238 @@ Delete
             navButtons[2].classList.add("active");
         }
 
-    </script>s
+    </script> -->
 
+
+    <script>
+const BASE_URL = "https://rentgo-m25u.onrender.com";
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ================= AUTH CHECK ================= */
+
+    fetch(BASE_URL + "/me", { credentials: "include" })
+        .then(r => r.json())
+        .then(d => {
+
+            if (!d.loggedIn || d.user.role !== "seller") {
+                location = "/";
+                return;
+            }
+
+            const sellerName = document.getElementById("sellerName");
+            if (sellerName) {
+                sellerName.textContent = d.user.full_name;
+            }
+
+        });
+
+    /* ================= LOAD PRODUCTS ================= */
+
+    async function loadProducts() {
+
+        const r = await fetch(BASE_URL + "/seller/products", {
+            credentials: "include"
+        });
+
+        const d = await r.json();
+
+        const box = document.getElementById("productList");
+        box.innerHTML = "";
+
+        if (!d.success) {
+            box.innerHTML = "No products";
+            return;
+        }
+
+        d.products.forEach(p => {
+
+            box.innerHTML += `
+<div class="product-card">
+
+<img src="${p.image}">
+
+<h3>${p.name}</h3>
+
+<p>${p.description}</p>
+
+₹${p.price} | Stock ${p.stock}
+
+<div class="product-actions">
+
+<button class="btn-edit" onclick='editProduct(${JSON.stringify(p)})'>
+Edit
+</button>
+
+<button class="btn-delete" onclick="deleteProduct(${p.id})">
+Delete
+</button>
+
+</div>
+
+</div>
+`;
+
+        });
+
+    }
+
+    /* ================= SAVE PRODUCT ================= */
+
+    document.getElementById("productForm").onsubmit = async function (e) {
+
+        e.preventDefault();
+
+        const id = document.getElementById("productId").value;
+
+        const body = {
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            category: document.getElementById("category").value,
+            price: document.getElementById("price").value,
+            stock: document.getElementById("stock").value,
+            image: document.getElementById("image").value
+        };
+
+        const url = id
+            ? BASE_URL + "/seller/product/" + id
+            : BASE_URL + "/seller/product";
+
+        const method = id ? "PUT" : "POST";
+
+        await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        this.reset();
+        document.getElementById("productId").value = "";
+
+        loadProducts();
+    };
+
+    /* ================= EDIT ================= */
+
+    window.editProduct = function (p) {
+
+        document.getElementById("productId").value = p.id;
+        document.getElementById("name").value = p.name;
+        document.getElementById("description").value = p.description;
+        document.getElementById("category").value = p.category;
+        document.getElementById("price").value = p.price;
+        document.getElementById("stock").value = p.stock;
+        document.getElementById("image").value = p.image;
+
+        window.scrollTo(0, 0);
+    };
+
+    /* ================= DELETE ================= */
+
+    window.deleteProduct = async function (id) {
+
+        if (!confirm("Delete product?")) return;
+
+        await fetch(BASE_URL + "/seller/product/" + id, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        loadProducts();
+    };
+
+    /* ================= DARK MODE ================= */
+
+    const saved = localStorage.getItem("sellerTheme");
+
+    if (saved === "dark") {
+        document.body.classList.add("dark");
+
+        const icon = document.querySelector(".slider-icon");
+        if (icon) {
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+        }
+    }
+
+    /* ================= INIT ================= */
+
+    loadProducts();
+
+});
+
+/* ================= TOGGLE THEME ================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+    const icon = document.querySelector(".slider-icon");
+
+    if (document.body.classList.contains("dark")) {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+        localStorage.setItem("sellerTheme", "dark");
+    } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+        localStorage.setItem("sellerTheme", "light");
+    }
+}
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+
+    fetch(BASE_URL + "/logout", { credentials: "include" })
+        .then(() => {
+            window.history.replaceState(null, null, "/");
+            window.location.href = "/index.html";
+        });
+}
+
+/* ================= PREVENT BACK ================= */
+
+window.history.pushState(null, null, window.location.href);
+
+window.onpopstate = function () {
+    window.history.go(1);
+};
+
+/* ================= NAVBAR SCROLL ================= */
+
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll", function () {
+
+    if (window.scrollY > 50) {
+        navbar.classList.add("scrolled");
+        document.body.style.paddingTop = navbar.offsetHeight + "px";
+    } else {
+        navbar.classList.remove("scrolled");
+        document.body.style.paddingTop = "0px";
+    }
+
+});
+
+/* ================= ACTIVE NAV BUTTON ================= */
+
+const path = window.location.pathname;
+const navButtons = document.querySelectorAll(".nav-btn");
+
+navButtons.forEach(btn => btn.classList.remove("active"));
+
+if (path.includes("seller_dashboard")) {
+    navButtons[0].classList.add("active");
+}
+else if (path.includes("seller_analytics")) {
+    navButtons[1].classList.add("active");
+}
+else if (path.includes("seller_orders")) {
+    navButtons[2].classList.add("active");
+}
+</script>
 </body>
 
 </html>
