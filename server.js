@@ -546,8 +546,9 @@ app.delete("/user/address/:slot", (req, res) => {
 /* ================= SELLER ADD PRODUCT ================= */
 app.post("/seller/product", (req, res) => {
 
+    // 🔐 AUTH CHECK
     if (!req.session.user || req.session.user.role !== "seller") {
-        return res.status(403).json({ success:false });
+        return res.status(403).json({ success: false });
     }
 
     const { name, description, category, price, stock, image } = req.body;
@@ -555,42 +556,47 @@ app.post("/seller/product", (req, res) => {
     console.log("SESSION:", req.session.user);
     console.log("BODY:", req.body);
 
-    if (!name || !category || !price) {
+    // ✅ VALIDATION
+    if (!name || !category || !price || isNaN(price)) {
         return res.status(400).json({
-            success:false,
-            error:"Missing required fields"
+            success: false,
+            error: "Invalid input"
         });
     }
 
+    // ✅ SQL
     const sql = `
         INSERT INTO products
         (seller_id, name, description, category, price, stock, image)
         VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [
+    // ✅ SAFE VALUES
+    const values = [
         req.session.user.id,
         name,
-        description || "",
+        description || "No description",
         category,
-        price,
-        stock || 1,
-        image || ""
-    ], (err) => {
+        Number(price),
+        stock ? Number(stock) : 1,
+        image || "https://via.placeholder.com/150"
+    ];
+
+    db.query(sql, values, (err) => {
 
         if (err) {
             console.error("INSERT ERROR:", err);
             return res.status(500).json({
-                success:false,
+                success: false,
                 error: err.message
             });
         }
 
-        res.json({ success:true });
+        res.json({ success: true });
 
     });
-});
 
+});
 /* ================= SELLER VIEW PRODUCTS ================= */
 app.get("/seller/products", (req, res) => {
 
