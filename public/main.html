@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crescendo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:linear-gradient(to right,#c3cfe2,#e2e2e2);
+}
+
+/* ================= NAVBAR ================= */
+
+.navbar{
+    width:90%;
+    margin:30px auto;
+    background:#fff;
+    padding:15px 40px;
+    border-radius:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.logo{
+    font-weight:700;
+    letter-spacing:2px;
+}
+
+.nav-links{
+    display:flex;
+    gap:25px;
+    list-style:none;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#333;
+    font-size:14px;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:20px;
+}
+
+.sign-btn{
+    background:#2563eb;
+    color:#fff;
+    padding:8px 18px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+/* ================= HERO ================= */
+
+.hero{
+    width:90%;
+    margin:0 auto 40px auto;
+    background:#1e3a8a;
+    border-radius:20px;
+    padding:50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    color:#fff;
+}
+
+.hero-text h1{
+    font-size:42px;
+    margin-bottom:15px;
+}
+
+.hero-text p{
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+.hero button{
+    background:#fff;
+    color:#1e3a8a;
+    padding:10px 20px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+.hero img{
+    width:380px;
+    border-radius:15px;
+}
+
+/* ================= SECTION ================= */
+
+.section{
+    width:90%;
+    margin:40px auto;
+}
+
+.section h2{
+    margin-bottom:20px;
+}
+
+.products{
+    display:flex;
+    gap:25px;
+}
+
+.card{
+    flex:1;
+    background:#fff;
+    border-radius:15px;
+    padding:25px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+.card img{
+    width:160px;
+    height:160px;
+    object-fit:contain;
+    margin-bottom:15px;
+}
+
+.card h4{
+    margin-bottom:5px;
+}
+
+.card a{
+    text-decoration:none;
+    color:#2563eb;
+    font-size:14px;
+}
+
+/* ================= EXPERIENCE ================= */
+
+.experience{
+    width:90%;
+    margin:40px auto;
+    background:#fff;
+    border-radius:20px;
+    padding:40px;
+    text-align:center;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+
+.features{
+    display:flex;
+    justify-content:space-around;
+    margin-top:30px;
+}
+
+.feature{
+    width:30%;
+}
+
+.feature h4{
+    margin:10px 0;
+}
+
+footer{
+    margin-top:20px;
+    font-size:14px;
+    color:#666;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<div class="navbar">
+    <div class="logo">CRESCENDO</div>
+
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Shop</a></li>
+        <li><a href="#">Men</a></li>
+        <li><a href="#">Women</a></li>
+        <li><a href="#">Kids</a></li>
+    </ul>
+
+    <div class="nav-right">
+        <a href="#">Contact</a>
+        <button class="sign-btn">Sign In</button>
+    </div>
+</div>
+
+<!-- ================= HERO ================= -->
+<div class="hero">
+    <div class="hero-text">
+        <h1>Discover Fashion<br>For Everyone</h1>
+        <p>Explore the latest collections for men, women & kids.</p>
+        <button>Shop Now</button>
+    </div>
+
+    <img src="https://images.unsplash.com/photo-1602810316693-3667c854239a?w=800" alt="Family Fashion">
+</div>
+
+<!-- ================= SHOP SECTION 1 ================= -->
+<div class="section">
+    <h2>Shop Men</h2>
+
+    <div class="products">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400">
+            <h4>Apparel</h4>
+            <a href="#">View Accessories</a>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1495121605193-b116b5b09a4c?w=400">
+            <h4>Footwear</h4>
+            <a href="#">View More</a>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1519238359922-989348752efb?w=400">
+            <h4>Kids Wear</h4>
+            <a href="#">View More</a>
+        </div>
+    </div>
+</div>
+
+<!-- ================= SHOP SECTION 2 ================= -->
+<div class="section">
+    <h2>Shop More</h2>
+
+    <div class="products">
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1528701800489-20be3c64b49d?w=400">
+            <h4>Accessories</h4>
+            <a href="#">View More</a>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400">
+            <h4>Footwear</h4>
+            <a href="#">$50 Store</a>
+        </div>
+
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400">
+            <h4>Handbags</h4>
+            <a href="#">View More</a>
+        </div>
+    </div>
+</div>
+
+<!-- ================= EXPERIENCE ================= -->
+<div class="experience">
+    <h2>Experience Trends</h2>
+
+    <div class="features">
+        <div class="feature">
+            <h4>Free Shipping</h4>
+            <p>On all orders over ₹999</p>
+        </div>
+
+        <div class="feature">
+            <h4>Easy Returns</h4>
+            <p>30 days hassle-free return policy</p>
+        </div>
+
+        <div class="feature">
+            <h4>Secure Payment</h4>
+            <p>100% secure & encrypted checkout</p>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 Crescendo Fashion
+    </footer>
+</div>
+
+</body>
+</html>

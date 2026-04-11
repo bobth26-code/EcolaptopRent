@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>My Orders</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+/* ===== BASE ===== */
+body {
+    font-family: Arial, sans-serif;
+    background: #f4f6f8;
+    margin: 0;
+}
+
+.container {
+    max-width: 1000px;
+    margin: auto;
+    padding: 20px;
+}
+
+body{
+    font-family:'Segoe UI', Arial;
+    background:#f4f6f8;
+    margin:0;
+    transition: background .3s, color .3s;
+}
+
+/* ================= NAVBAR ================= */
+/* ================= NAVBAR ================= */
+.navbar{
+    display:flex;
+    align-items:center;
+    padding:12px 30px;
+    background:#ffffff;
+    border-bottom:1px solid #eee;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
+}
+
+.logo{
+    height:40px;
+}
+
+/* Center Navigation */
+.nav-links{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    gap:40px;
+}
+
+/* ================= LOGOUT BUTTON ================= */
+
+.logout{
+    padding:8px 18px;
+    border-radius:30px;
+    border:none;
+    background:linear-gradient(135deg,#ff3f6c,#e11d48);
+    color:#fff;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition:all .3s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+/* Hover Effect */
+.logout:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 20px rgba(225,29,72,.4);
+}
+
+/* Click Effect */
+.logout:active{
+    transform:scale(0.96);
+}
+
+/* Shine Animation */
+.logout::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-75%;
+    width:50%;
+    height:100%;
+    background:linear-gradient(
+        120deg,
+        rgba(255,255,255,0.4),
+        rgba(255,255,255,0)
+    );
+    transform:skewX(-25deg);
+    transition:.6s;
+}
+
+.logout:hover::before{
+    left:130%;
+}
+body.dark-mode .logout{
+    background:linear-gradient(135deg,#ef4444,#b91c1c);
+}
+
+.nav-links a{
+    position:relative;
+    text-decoration:none;
+    font-weight:600;
+    color:#111;
+    font-size:15px;
+    transition:.3s;
+}
+
+/* Animated underline */
+.nav-links a::after{
+    content:"";
+    position:absolute;
+    width:0;
+    height:3px;
+    background:#ff3f6c;
+    left:0;
+    bottom:-6px;
+    transition:.3s;
+}
+.nav-links a:hover::after{
+    width:100%;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:18px;
+}
+
+/* ================= TOGGLE ================= */
+.switch{
+    position:relative;
+    width:40px;
+    height:20px;
+}
+.switch input{ display:none; }
+
+.slider{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:#ccc;
+    border-radius:20px;
+    transition:.3s;
+}
+.slider:before{
+    content:"";
+    position:absolute;
+    height:14px;
+    width:14px;
+    left:3px;
+    top:3px;
+    background:white;
+    border-radius:50%;
+    transition:.3s;
+}
+input:checked + .slider{
+    background:#ff3f6c;
+}
+input:checked + .slider:before{
+    transform:translateX(20px);
+}
+h2 {
+    margin-bottom: 15px;
+}
+
+/* ===== ORDER GRID ===== */
+#orders {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    gap: 20px;
+}
+
+/* ===== ORDER CARD ===== */
+.order {
+    background: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    transition: transform .25s ease, box-shadow .25s ease;
+}
+body.dark-mode{
+    background:#111827;
+    color:#f3f4f6;
+}
+
+body.dark-mode .navbar{
+    background:#1f2937;
+}
+
+body.dark-mode .nav-links a{
+    color:#f3f4f6;
+}
+.order:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.2);
+}
+
+.order img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f1f5f9;
+}
+
+/* ===== ORDER INFO ===== */
+.order-info {
+    flex: 1;
+}
+
+.order-id {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 2px;
+}
+
+.order-info b {
+    font-size: 15px;
+    color: #0f172a;
+}
+
+.order-info small {
+    color: #64748b;
+}
+
+/* ===== ACTIONS ===== */
+.order-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+/* VIEW DETAILS BUTTON */
+.view-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 6px;
+    background: #2563eb;
+    color: #fff;
+    cursor: pointer;
+}
+
+.view-btn:hover {
+    background: #1e40af;
+}
+
+/* ===== STATUS BADGE ===== */
+.badge {
+    padding: 6px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.pending { background: #f59e0b; }
+.paid { background: #2563eb; }
+.shipped { background: #7c3aed; }
+.delivered { background: #16a34a; }
+</style>
+</head>
+
+<body>
+
+<script>
+/* ===== AUTH CHECK ===== */
+fetch("/me", { credentials: "include" })
+.then(r => r.json())
+.then(d => {
+    if (!d.loggedIn || d.user.role !== "user") {
+        location = "/";
+    }
+});
+</script>
+    <!-- NAVBAR -->
+<header class="navbar">
+    <div class="nav-left">
+        <!-- <img src="logo.png" class="logo"> -->
+     <span class="seller-name">
+                <i class="fas fa-store seller-icon"></i>
+                <span id="sellerName"></span>
+            </span>
+    </div>
+<div class="nav-center">
+
+<button class="nav-btn" onclick="location.href='seller_dashboard.html'">
+Products
+</button>
+
+<button class="nav-btn" onclick="location.href='seller_analytics.html'">
+Analytics
+</button>
+
+<button class="nav-btn" onclick="location.href='seller_orders.html'">
+Orders
+</button>
+
+</div>
+
+    <div class="nav-right">
+   
+ <button class="theme-toggle" onclick="toggleTheme()">
+    <div class="slider-track">
+        <div class="slider-thumb">
+            <i class="fas fa-sun slider-icon"></i>
+        </div>
+    </div>
+</button>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</header>
+<div class="container">
+    <h2>📦 My Orders</h2>
+    <div id="orders">Loading...</div>
+</div>
+
+<script>
+const orders = document.getElementById("orders");
+
+async function loadOrders() {
+    const r = await fetch("/user/orders", { credentials: "include" });
+    const d = await r.json();
+
+    if (!d.success || d.orders.length === 0) {
+        orders.innerHTML = "No orders yet";
+        return;
+    }
+
+    orders.innerHTML = "";
+    d.orders.forEach(o => {
+        orders.innerHTML += `
+        <div class="order">
+            <img src="${o.image}" alt="${o.product_name}">
+            
+            <div class="order-info">
+                <div class="order-id">Order ID: #${o.id}</div>
+                <b>${o.product_name}</b><br>
+                Qty: ${o.quantity}<br>
+                <small>${new Date(o.created_at).toLocaleString()}</small>
+            </div>
+
+            <div class="order-actions">
+                <span class="badge ${o.status}">${o.status}</span>
+                <button class="view-btn" onclick="viewOrder(${o.id})">
+                    View Order Details
+                </button>
+            </div>
+        </div>`;
+    });
+}
+
+/* LOGOUT */
+async function logout(){
+    await fetch("/logout", { credentials:"include" });
+    location = "/";
+}
+
+const toggle = document.getElementById("modeToggle");
+
+if (toggle) {
+    if(localStorage.getItem("darkMode")==="enabled"){
+        document.body.classList.add("dark-mode");
+        toggle.checked=true;
+    }
+
+    toggle.addEventListener("change",function(){
+        if(this.checked){
+            document.body.classList.add("dark-mode");
+            localStorage.setItem("darkMode","enabled");
+        }else{
+            document.body.classList.remove("dark-mode");
+            localStorage.setItem("darkMode","disabled");
+        }
+    });
+}
+
+/* ===== VIEW ORDER DETAILS (UI ONLY) ===== */
+function viewOrder(orderId) {
+    alert("View details for Order ID: " + orderId);
+    // 🔜 Later you can:
+    // window.location.href = `/order-details.html?id=${orderId}`;
+    // OR open modal
+}
+
+loadOrders();
+
+/* 🔄 auto-refresh every 5 sec */
+setInterval(loadOrders, 5000);
+
+
+/* ================= DARK MODE ================= */
+
+const saved = localStorage.getItem("sellerTheme");
+
+if (saved === "dark") {
+document.body.classList.add("dark");
+
+const icon = document.querySelector(".slider-icon");
+if(icon){
+icon.classList.remove("fa-sun");
+icon.classList.add("fa-moon");
+}
+}
+
+/* ================= INIT ================= */
+
+
+
+/* ================= TOGGLE THEME ================= */
+
+function toggleTheme(){
+
+document.body.classList.toggle("dark");
+
+const icon = document.querySelector(".slider-icon");
+
+if(document.body.classList.contains("dark")){
+icon.classList.remove("fa-sun");
+icon.classList.add("fa-moon");
+localStorage.setItem("sellerTheme","dark");
+}
+else{
+icon.classList.remove("fa-moon");
+icon.classList.add("fa-sun");
+localStorage.setItem("sellerTheme","light");
+}
+
+}
+
+/* ================= LOGOUT ================= */
+
+function logout(){
+
+fetch("/logout",{credentials:"include"})
+.then(()=>{
+
+// prevent back button access
+window.history.replaceState(null,null,"/");
+
+// redirect to login
+window.location.href="/index.html";
+
+});
+
+}
+
+/* ================= PREVENT BACK ================= */
+
+window.history.pushState(null,null,window.location.href);
+
+window.onpopstate=function(){
+window.history.go(1);
+}
+
+/* ================= NAVBAR SCROLL ================= */
+
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll",function(){
+
+if(window.scrollY>50){
+
+navbar.classList.add("scrolled");
+document.body.style.paddingTop = navbar.offsetHeight + "px";
+
+}
+else{
+
+navbar.classList.remove("scrolled");
+document.body.style.paddingTop="0px";
+
+}
+
+});
+</script>
+
+</body>
+</html>

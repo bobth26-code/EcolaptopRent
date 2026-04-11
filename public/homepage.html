@@ -1,0 +1,1355 @@
+<!-- Rahul@123 -->
+<!-- Fashion@123 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            transition: background .3s, color .3s;
+        }
+
+        /* ================= NAVBAR ================= */
+
+        .navbar {
+            width: 90%;
+            margin: 25px auto;
+            background: #ffffff;
+            padding: 14px 35px;
+            border-radius: 20px;
+            display: flex;
+
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: all 0.35s ease;
+            position: relative;
+            z-index: 1000;
+            overflow: visible;
+        }
+
+
+
+        /* When Scrolled */
+
+
+        .navbar.scrolled {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 96%;
+            margin: 0;
+            border-radius: 0;
+            padding: 12px 30px;
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+
+        /* Smooth slide animation */
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+            }
+
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* Logo */
+        .logo {
+            height: 38px;
+        }
+
+        /* Center navigation */
+        .nav-center {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-left: 40px;
+        }
+
+        .nav-link {
+            position: relative;
+            color: #111;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 6px 0;
+        }
+
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 3px;
+            background: #ff3f6c;
+            left: 0;
+            bottom: -6px;
+            border-radius: 5px;
+            transition: width .3s ease;
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        /* ================= SEARCH ================= */
+
+        .nav-search {
+            margin-left: 40px;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 18px 10px 40px;
+            border-radius: 30px;
+            border: 2px solid #ddd;
+            width: 260px;
+            font-size: 14px;
+            outline: none;
+            transition: .3s;
+        }
+
+        .search-box input:focus {
+            border-color: #ff3f6c;
+            box-shadow: 0 0 0 3px rgba(255, 63, 108, .1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        /* ================= RIGHT SECTION ================= */
+
+        .nav-right {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .user-menu {
+            position: relative;
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: .3s;
+        }
+
+        .user-menu:hover {
+            background: #fff0f4;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Hide emoji if you want */
+        .user-info::before {
+            content: none;
+        }
+
+        /* Circle Avatar */
+        #username {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 15px;
+            text-transform: uppercase;
+        }
+
+        /* Dark mode */
+        body.dark #username {
+            background: linear-gradient(135deg, #1e293b, #334155);
+        }
+
+
+        /* ================= DROPDOWN ================= */
+
+        .dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: -10px;
+            background: #fff;
+            min-width: 220px;
+            border-radius: 14px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .12);
+            overflow: hidden;
+            border: 1px solid #f1f1f1;
+            z-index: 1000;
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 12px 18px;
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .dropdown a:hover {
+            background: #ff3f6c;
+            color: #fff;
+        }
+
+        .user-menu:hover .dropdown {
+            display: block;
+        }
+
+        /* ================= CART BADGE ================= */
+
+        .cart-link {
+            position: relative;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: 8px;
+            right: 18px;
+            background: #ff3f6c;
+            color: #fff;
+            font-size: 11px;
+            padding: 3px 6px;
+            border-radius: 50px;
+            font-weight: bold;
+        }
+
+        /* ================= TOGGLE ================= */
+        .toggle-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        /* Hide checkbox */
+        .switch input {
+            display: none;
+        }
+
+        .switch {
+            cursor: pointer;
+        }
+
+        /* ===== TOGGLE ===== */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        /* Track */
+        .slider-track {
+            width: 55px;
+            /* reduced size */
+            height: 28px;
+            /* reduced height */
+            background: linear-gradient(135deg, #facc15, #f59e0b);
+            border-radius: 50px;
+            position: relative;
+            transition: 0.4s ease;
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Thumb */
+        .slider-thumb {
+            width: 22px;
+            /* smaller thumb */
+            height: 22px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s cubic-bezier(.4, 0, .2, 1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Icon */
+        .slider-icon {
+            font-size: 12px;
+            color: #f59e0b;
+            transition: 0.3s ease;
+        }
+
+        .slider-thumb i {
+            transition: 0.4s ease;
+        }
+
+        body.dark .slider-thumb i {
+            transform: rotate(360deg);
+        }
+
+        /* 🌙 DARK MODE STYLE */
+        body.dark .slider-track {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+
+        body.dark .slider-thumb {
+            left: 28px;
+            /* adjusted for new width */
+            background: #111827;
+        }
+
+        body.dark .slider-icon {
+            color: #60a5fa;
+        }
+
+
+
+
+        /* ================= PRODUCTS ================= */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        #productList {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: #fff;
+            padding: 18px;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+            transition: .3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .btn-cart {
+            margin-top: 12px;
+            width: 100%;
+            padding: 10px;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-cart:hover {
+            background: #1e40af;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: .3s;
+        }
+
+        /* ===== SLIDER ===== */
+        .banner-slider {
+            width: 100%;
+            height: 520px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slides {
+            width: 100%;
+            height: 100%;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .dot.active {
+            background: #ff6600;
+            opacity: 1;
+        }
+
+        input:checked+.slider {
+            background: #ff3f6c;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(20px);
+        }
+
+        /* ================= DARK MODE ================= */
+
+        body.dark {
+            background: #111827;
+            color: #f3f4f6;
+        }
+
+        /* Navbar */
+        body.dark .navbar {
+            background: #1f2937;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Nav links */
+        body.dark .nav-link {
+            color: #f3f4f6;
+        }
+
+        /* Search */
+        body.dark .search-box input {
+            background: #374151;
+            color: #fff;
+            border: 1px solid #555;
+        }
+body,
+.category-card,
+.review-card,
+.brand-card,
+.footer{
+transition:all 0.3s ease;
+}/* Headings in dark theme */
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode h4,
+body.dark-mode h5,
+body.dark-mode h6{
+color:#ffffff;
+}
+
+/* Section titles */
+body.dark-mode .reviews h2,
+body.dark-mode .brands h2{
+color:#ffffff;
+}
+
+/* Category headings */
+body.dark-mode .category-card h2{
+color:#ffffff;
+}
+
+/* Footer headings */
+body.dark .footer h3{
+color:#ffffff;
+}
+
+/* Paragraph text */
+body.dark p{
+color:#d1d5db;
+}
+
+/* Links */
+body.dark-mode a{
+color:#e5e7eb;
+}
+        body.dark .search-icon {
+            color: #ccc;
+        }
+
+        /* Dropdown */
+        body.dark .dropdown {
+            background: #1f2937;
+            border: 1px solid #374151;
+        }
+
+        body.dark .dropdown a {
+            color: #f3f4f6;
+        }
+
+        body.dark .dropdown a:hover {
+            background: #ff3f6c;
+            color: white;
+        }
+
+        /* Product cards */
+        body.dark .product-card {
+            background: #1f2937;
+            color: #f3f4f6;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, .4);
+        }
+
+        .category-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 40px;
+            max-width: 1400px;
+            margin: auto;
+        }
+
+        .category-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        .category-images {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .category-images img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .category-images img:hover {
+            transform: scale(1.05);
+        }
+
+       .reviews{
+padding:60px 20px;
+/* background:#f5f5f5; */
+text-align:center;
+overflow:hidden;
+}
+
+.review-slider{
+overflow:hidden;
+width:100%;
+}
+
+.review-track{
+display:flex;
+gap:25px;
+width:max-content;
+
+}
+
+.review-card{
+/* background:white; */
+padding:20px;
+width:280px;
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.1);
+flex-shrink:0;
+}/* DARK MODE REVIEW FIX */
+
+.review-card p{
+font-size:14px;
+margin-bottom:10px;
+}
+
+.review-card span{
+color:#ff9800;
+font-size:18px;
+}
+
+@keyframes scrollReviews{
+
+0%{
+transform:translateX(0);
+}
+
+100%{
+transform:translateX(-50%);
+}
+
+}
+        .footer {
+            background: #222;
+            color: white;
+            padding: 50px 20px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: auto;
+            flex-wrap: wrap;
+        }
+
+        .footer-col h3 {
+            margin-bottom: 15px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+        .footer-col ul li a {
+            color: #ccc;
+            text-decoration: none;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            color: #aaa;
+        }
+
+        .brands {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .brands {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .brand-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .brand-card {
+            width: 160px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-card img {
+            max-width: 120px;
+            max-height: 40px;
+            object-fit: contain;
+        }
+
+        s .brand-container img:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        @media(max-width:768px) {
+            .banner-slider {
+                height: 250px;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <script>
+        fetch("/me", { credentials: "include" })
+            .then(r => r.json())
+            .then(d => {
+                if (!d.loggedIn || d.user.role !== "user") location = "/";
+                document.getElementById("username").textContent = d.user.full_name;
+            });
+    </script>
+
+    <header class="navbar">
+
+        <img src="https://i.etsystatic.com/19543171/r/il/0617c5/5329319943/il_1588xN.5329319943_ppun.jpg" class="logo">
+
+        <nav class="nav-center">
+            <a class="nav-link">Home</a>
+            <a class="nav-link" onclick="window.location.href='laptop.html'"> Laptop</a>
+            <a class="nav-link" onclick="window.location.href='monitor.html'">Monitors</a>
+            <a class="nav-link" onclick="window.location.href='keyboard.html'">keyboard</a>
+            <a class="nav-link" onclick="window.location.href='projector.html'">Projector</a>
+        </nav>
+
+        <div class="nav-search">
+            <div class="search-box">
+                <input id="searchInput" placeholder="Search products">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <div class="user-menu">
+                <span class="user-info">
+                    👤 <span id="username"></span>
+                </span>
+
+                <div class="dropdown">
+                    <a href="user_detail.html">My Profile</a>
+
+                    <a href="cart.html" class="cart-link">
+                        🛒 Cart
+                        <span id="cartCount" class="cart-badge">0</span>
+                    </a>
+
+                    <a href="orders.html">🛒 Orders</a>
+
+                    <div class="toggle-container">
+                        <span>🌙 Dark Mode</span>
+
+                        <label class="switch">
+                            <input type="checkbox" id="modeToggle">
+
+                            <div class="slider-track">
+                                <div class="slider-thumb">
+                                    <i class="fas fa-sun slider-icon"></i>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+
+
+                    <a onclick="logout()">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+
+    </header>
+    <div class="banner-slider">
+
+        <div class="slides">
+
+            <img src="image/templates/1775561454189.png" class="slide active">
+            <img src="image/templates/1775561803798.png"
+                alt="Laptop rental promotional banner featuring modern computing devices"
+                class="slide">
+            <img src="image/templates/1775561995533.png"
+                class="slide">
+            <img src="image/templates/1775562372622.png"
+                class="slide">
+
+        </div>
+
+        <div class="dots">
+            <span class="dot active" onclick="showSlide(0)"></span>
+            <span class="dot" onclick="showSlide(1)"></span>
+            <span class="dot" onclick="showSlide(2)"></span>
+            <span class="dot" onclick="showSlide(3)"></span>
+        </div>
+
+    </div>
+    <section class="category-section">
+
+        <!-- Laptop Category -->
+        <div class="category-card">
+            <h2>Laptops</h2>
+
+            <div class="category-images">
+                <a href="laptop.html">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400">
+                </a>
+
+                <a href="laptop.html">
+                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400">
+                </a>
+
+                <a href="laptop.html">
+                    <img src="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400">
+                </a>
+
+                <a href="laptop.html">
+                    <img src="https://images.unsplash.com/photo-1593642532400-2682810df593?w=400">
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- Monitor Category -->
+        <div class="category-card">
+            <h2>Monitors</h2>
+
+            <div class="category-images">
+                <a href="monitor.html">
+                    <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400">
+                </a>
+
+                <a href="monitor.html">
+                    <img src="https://images.unsplash.com/photo-1593642532744-d377ab507dc8?w=400">
+                </a>
+
+                <a href="monitor.html">
+                    <img src="https://images.unsplash.com/photo-1587202372775-e229f172b9d7?w=400">
+                </a>
+
+                <a href="monitor.html">
+                    <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?w=400">
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- Keyboard Category -->
+        <div class="category-card">
+            <h2>Keyboards</h2>
+
+            <div class="category-images">
+                <a href="keyboard.html">
+                    <img src="https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=400">
+                </a>
+
+                <a href="keyboard.html">
+                    <img src="https://images.unsplash.com/photo-1618384887929-16ec33fab9ef?w=400">
+                </a>
+
+                <a href="keyboard.html">
+                    <img src="https://images.unsplash.com/photo-1595225476474-87563907a212?w=400">
+                </a>
+
+                <a href="keyboard.html">
+                    <img src="https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?w=400">
+                </a>
+            </div>
+
+        </div>
+
+
+        <!-- Projector Category -->
+        <div class="category-card">
+            <h2>Projectors</h2>
+
+            <div class="category-images">
+                <a href="projector.html">
+                    <img src="https://images.unsplash.com/photo-1593508512255-86ab42a8e620?w=400">
+                </a>
+
+                <a href="projector.html">
+                    <img src="https://images.unsplash.com/photo-1622979135225-d2ba269cf1ac?w=400">
+                </a>
+
+                <a href="projector.html">
+                    <img src="https://images.unsplash.com/photo-1581093588401-16f14c1f2e8e?w=400">
+                </a>
+
+                <a href="projector.html">
+                    <img src="https://images.unsplash.com/photo-1587614382346-4ec70e388b28?w=400">
+                </a>
+            </div>
+
+        </div>
+
+    </section>
+  <section class="reviews">
+
+<h2>Customer Reviews</h2>
+
+<div class="review-slider">
+
+<div class="review-track">
+
+<div class="review-card">
+<p>"Very smooth rental process and the laptop was in excellent condition."</p>
+<h4>Rahul Sharma</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Affordable prices and quick delivery. Perfect for students."</p>
+<h4>Priya Patel</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Great service and reliable devices for office work."</p>
+<h4>Amit Verma</h4>
+<span>★★★★☆</span>
+</div>
+
+<div class="review-card">
+<p>"Laptop performance was excellent for my office tasks."</p>
+<h4>Neha Gupta</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Fast delivery and very helpful support team."</p>
+<h4>Rohan Mehta</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Best rental option for short-term projects."</p>
+<h4>Ankit Singh</h4>
+<span>★★★★☆</span>
+</div>
+
+<!-- duplicate for infinite loop -->
+
+<div class="review-card">
+<p>"Very smooth rental process and the laptop was in excellent condition."</p>
+<h4>Rahul Sharma</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Affordable prices and quick delivery. Perfect for students."</p>
+<h4>Priya Patel</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Great service and reliable devices for office work."</p>
+<h4>Amit Verma</h4>
+<span>★★★★☆</span>
+</div>
+
+<div class="review-card">
+<p>"Laptop performance was excellent for my office tasks."</p>
+<h4>Neha Gupta</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Fast delivery and very helpful support team."</p>
+<h4>Rohan Mehta</h4>
+<span>★★★★★</span>
+</div>
+
+<div class="review-card">
+<p>"Best rental option for short-term projects."</p>
+<h4>Ankit Singh</h4>
+<span>★★★★☆</span>
+</div>
+
+</div>
+</div>
+
+</section>
+    <section class="brands">
+
+        <h2>Available Brands</h2>
+
+        <div class="brand-container">
+
+            <div class="brand-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5kTrrtv-MTCsVeFYK8dFoa9iYJzwnNUDetA&s">
+            </div>
+
+            <div class="brand-card">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-E7XDys13HLlvETCaGI_oH4Q9bALgjP3-Ew&s">
+            </div>
+
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bd/Branding_lenovo-logo_lenovologoposred_low_res.png">
+            </div>
+
+            <div class="brand-card">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg">
+            </div>
+
+            <div class="brand-card">
+                <img src="https://static.vecteezy.com/system/resources/previews/016/460/781/non_2x/asus-company-logo-with-realistic-shadow-popular-computer-and-laptop-manufacturing-companies-logotype-free-png.png">
+            </div>
+
+        </div>
+
+    </section>
+    <footer class="footer">
+
+        <div class="footer-container">
+
+            <div class="footer-col">
+                <h3>Company</h3>
+                <ul>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Categories</h3>
+                <ul>
+                    <li><a href="laptop.html">Laptops</a></li>
+                    <li><a href="monitor.html">Monitors</a></li>
+                    <li><a href="keyboard.html">Keyboards</a></li>
+                    <li><a href="projector.html">Projectors</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h3>Contact</h3>
+                <ul>
+                    <li>Email: support@rentaltech.com</li>
+                    <li>Phone: +91 9876543210</li>
+                    <li>Mumbai, India</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <p class="copyright">
+            © 2026 Laptop Rental System
+        </p>
+
+    </footer>
+
+
+<!-- product show from selller to user pages -->
+    <!-- <div class="container">
+        <div id="productList">Loading...</div>
+    </div> -->
+
+
+
+
+
+    <script>
+        const box = document.getElementById("productList");
+        const searchInput = document.getElementById("searchInput");
+        const navbar = document.querySelector(".navbar");
+
+
+
+
+        /* ================= LOAD PRODUCTS ================= */
+        async function loadProducts() {
+            if (!box) return;
+
+            const r = await fetch("/products");
+            const d = await r.json();
+
+            if (!d.success) {
+                box.innerHTML = "No products";
+                return;
+            }
+
+            // product show//
+
+
+
+        //     box.innerHTML = "";
+
+        //     d.products.forEach(p => {
+        //         box.innerHTML += `
+        // <div class="product-card">
+        //     <img src="${p.image}">
+        //     <h3>${p.name}</h3>
+        //     <p>${p.description}</p>
+        //     <p>₹${p.price}</p>
+        //     <button class="btn-cart" onclick="addToCart(${p.id})">🛒 Add to Cart</button>
+        // </div>`;
+        //     });
+        }
+
+        /* ================= REAL TIME CART COUNT ================= */
+        async function loadCartCount() {
+
+            try {
+                const r = await fetch("/cart", {
+                    credentials: "include",
+                    cache: "no-store"
+                });
+
+                const d = await r.json();
+
+                let count = 0;
+
+                if (Array.isArray(d)) count = d.length;
+                else if (Array.isArray(d.items)) count = d.items.length;
+                else if (Array.isArray(d.cart)) count = d.cart.length;
+                else if (Array.isArray(d.data)) count = d.data.length;
+
+                const cartCount = document.getElementById("cartCount");
+                if (cartCount) cartCount.textContent = count;
+
+            } catch (err) {
+                console.log("Cart count error:", err);
+            }
+        }
+
+        /* ================= ADD TO CART ================= */
+        window.addToCart = async function (id) {
+
+            try {
+                const r = await fetch("/cart", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    credentials: "include",
+                    body: JSON.stringify({ product_id: id })
+                });
+
+                const d = await r.json();
+
+                if (d.success) {
+                    alert("✅ Added to cart");
+                    await loadCartCount();
+                } else {
+                    alert("❌ Failed");
+                }
+
+            } catch (err) {
+                alert("Error adding to cart");
+            }
+        }
+
+        /* ================= SEARCH ================= */
+        if (searchInput) {
+            searchInput.addEventListener("keyup", async function () {
+
+                const query = this.value.trim();
+
+                if (!query) return loadProducts();
+
+                const r = await fetch(`/search?q=${query}`);
+                const d = await r.json();
+
+                box.innerHTML = "";
+
+                if (d.length === 0) {
+                    box.innerHTML = "No products found";
+                    return;
+                }
+
+   // product show
+
+
+
+            //     d.forEach(p => {
+            //         box.innerHTML += `
+            //  <div class="product-card">
+            //     <img src="${p.image}">
+            //     <h3>${p.name}</h3>
+            //     <p>${p.description}</p>
+            //     <p>₹${p.price}</p>
+            //     <button class="btn-cart" onclick="addToCart(${p.id})">🛒 Add to Cart</button>
+            //  </div>`;
+                 //     });
+            });
+        }
+
+        /* ================= PLACEHOLDER SWIPE TEXT ================= */
+        const placeholderTexts = [
+            "Search laptop...",
+            "Search monitor...",
+            "Search Tablet...",
+            "Search projector...",
+
+        ];
+
+        let textIndex = 0;
+        let placeholderInterval;
+
+        function changePlaceholder() {
+
+            if (!searchInput) return;
+
+            searchInput.classList.add("fade-out");
+
+            setTimeout(() => {
+                searchInput.placeholder = placeholderTexts[textIndex];
+                searchInput.classList.remove("fade-out");
+                textIndex = (textIndex + 1) % placeholderTexts.length;
+            }, 300);
+        }
+
+        /* ================= DARK MODE ================= */
+
+        const toggle = document.getElementById("modeToggle");
+        const icon = document.querySelector(".slider-icon");
+
+        const saved = localStorage.getItem("sellerTheme");
+
+        if (saved === "dark") {
+            document.body.classList.add("dark");
+            if (toggle) toggle.checked = true;
+
+            if (icon) {
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+            }
+        }
+
+        if (toggle) {
+            toggle.addEventListener("change", function () {
+
+                document.body.classList.toggle("dark");
+
+                if (document.body.classList.contains("dark")) {
+
+                    if (icon) {
+                        icon.classList.remove("fa-sun");
+                        icon.classList.add("fa-moon");
+                    }
+
+                    localStorage.setItem("sellerTheme", "dark");
+
+                } else {
+
+                    if (icon) {
+                        icon.classList.remove("fa-moon");
+                        icon.classList.add("fa-sun");
+                    }
+
+                    localStorage.setItem("sellerTheme", "light");
+                }
+            });
+        }
+
+        /* Start Placeholder Animation */
+        placeholderInterval = setInterval(changePlaceholder, 2000);
+
+        if (searchInput) {
+            searchInput.addEventListener("focus", () => {
+                clearInterval(placeholderInterval);
+            });
+        }
+
+        /* ================= LOGOUT ================= */
+        function logout() {
+
+            fetch("/logout", { credentials: "include" })
+                .then(() => {
+
+                    // prevent back button access
+                    window.history.replaceState(null, null, "/");
+
+                    // redirect to login
+                    window.location.href = "/index.html";
+
+                });
+
+        }
+
+        /* ================= NAVBAR SCROLL ================= */
+        if (navbar) {
+            window.addEventListener("scroll", function () {
+
+                if (window.scrollY > 50) {
+                    navbar.classList.add("scrolled");
+                    document.body.style.paddingTop = navbar.offsetHeight + "px";
+                } else {
+                    navbar.classList.remove("scrolled");
+                    document.body.style.paddingTop = "0px";
+                }
+
+            });
+        }
+
+
+        let currentSlide = 0;
+
+        const slides = document.querySelectorAll(".slide");
+        const dots = document.querySelectorAll(".dot");
+
+        function showSlide(index) {
+
+            slides.forEach(s => s.classList.remove("active"));
+            dots.forEach(d => d.classList.remove("active"));
+
+            slides[index].classList.add("active");
+            dots[index].classList.add("active");
+
+            currentSlide = index;
+
+        }
+
+        /* AUTO SLIDER */
+
+        setInterval(() => {
+
+            currentSlide++;
+
+            if (currentSlide >= slides.length) {
+                currentSlide = 0;
+            }
+
+            showSlide(currentSlide);
+
+        }, 4000);
+
+
+
+        /* ================= INITIAL LOAD ================= */
+        loadProducts();
+        loadCartCount();
+
+
+    </script>
+
+
+</body>
+
+</html>

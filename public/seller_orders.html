@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>Seller Orders</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Segoe UI',sans-serif;
+background:#f1f5f9;
+min-height:100vh;
+}
+    /* ===== NAVBAR (SAME AS DASHBOARD) ===== */
+        .navbar {
+            width: 90%;
+            margin: 30px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            background: #ffffff;
+            color: #111827;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.35s ease;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            padding: 12px 30px;
+            /* slightly shrink */
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap');
+
+
+
+        body.dark .navbar {
+            /* background: #111827; */
+            background: #1f2937;
+            color: #ffffff;
+        }
+
+        .seller-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .seller-icon {
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        /* After Scroll in Dark Mode */
+        body.dark .navbar.scrolled {
+            background: #0f172a;
+
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+        }
+
+
+
+
+
+
+
+        .logo {
+            width: 55px;
+            border-radius: 10px;
+        }
+
+        .seller-name {
+            font-weight: 600;
+        }
+
+      
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+.nav-center{
+    display:flex;
+    gap:15px;
+}
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+        .nav-btn {
+            background: #1f2937;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-btn.active {
+            background: #2563eb;
+        }
+
+        
+
+     .logout-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5);
+}
+
+.logout-btn:active {
+    transform: scale(0.96);
+}
+.logout-btn i {
+    margin-right: 6px;
+}
+
+
+        /* ===== TOGGLE ===== */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Track */
+.slider-track {
+    width: 70px;
+    height: 36px;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    border-radius: 50px;
+    position: relative;
+    margin-left: 70px;
+    transition: 0.4s ease;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Thumb */
+.slider-thumb {
+    width: 30px;
+    height: 30px;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Icon */
+.slider-icon {
+    font-size: 14px;
+    color: #f59e0b;
+    transition: 0.3s ease;
+}
+.slider-thumb {
+    transition: 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+.slider-thumb i {
+    transition: 0.4s ease;
+}
+
+body.dark .slider-thumb i {
+    transform: rotate(360deg);
+}
+
+/* 🌙 DARK MODE STYLE */
+body.dark .slider-track {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+body.dark .slider-thumb {
+    left: 37px;
+    background: #111827;
+}
+
+body.dark .slider-icon {
+    color: #60a5fa;
+}
+
+/* ORDERS */
+
+.container{
+max-width:1000px;
+margin:auto;
+padding:30px 20px;
+}
+
+.order-card{
+background:#fff;
+padding:20px;
+border-radius:18px;
+margin-bottom:20px;
+box-shadow:0 10px 25px rgba(0,0,0,.08);
+display:flex;
+gap:20px;
+}
+
+.order-card img{
+width:100px;
+height:100px;
+object-fit:cover;
+border-radius:14px;
+}
+
+.order-info{
+flex:1;
+line-height:1.7;
+}
+
+.order-meta{
+margin-top:5px;
+font-size:14px;
+color:#64748b;
+}
+
+.status-actions{
+margin-top:15px;
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+}/* ================= DARK MODE ================= */
+
+body.dark{
+background:#0f172a;
+color:#f1f5f9;
+}
+
+/* NAVBAR */
+
+body.dark .navbar{
+background:#1f2937;
+box-shadow:0 8px 30px rgba(0,0,0,0.5);
+}
+
+/* ORDER CARD */
+
+body.dark .order-card{
+background:#1e293b;
+color:#f1f5f9;
+box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+/* ORDER META */
+
+body.dark .order-meta{
+color:#cbd5f5;
+}
+
+/* DETAILS BOX */
+
+body.dark .details{
+background:#0f172a;
+border:1px solid #374151;
+color:#e5e7eb;
+}
+
+/* BUTTONS */
+
+body.dark button{
+color:#f1f5f9;
+}
+
+body.dark button:hover{
+background:#475569;
+}
+
+.status-actions button{
+border:none;
+padding:6px 12px;
+border-radius:8px;
+font-size:12px;
+cursor:pointer;
+}
+
+.pending{background:#fde047;}
+.paid{background:#38bdf8;}
+.shipped{background:#fb923c;}
+.delivered{background:#22c55e;color:#fff;}
+
+.details{
+display:none;
+margin-top:12px;
+background:#f8fafc;
+padding:12px;
+border-radius:12px;
+font-size:13px;
+}
+
+</style>
+</head>
+
+<body>
+    
+    <!-- NAVBAR -->
+<header class="navbar">
+    <div class="nav-left">
+        <!-- <img src="logo.png" class="logo"> -->
+     <span class="seller-name">
+                <i class="fas fa-store seller-icon"></i>
+                <span id="sellerName"></span>
+            </span>
+    </div>
+
+   <div class="nav-center">
+
+<button class="nav-btn" onclick="location.href='seller_dashboard.html'">
+Products
+</button>
+
+<button class="nav-btn" onclick="location.href='seller_analytics.html'">
+Analytics
+</button>
+
+<button class="nav-btn" onclick="location.href='seller_orders.html'">
+Orders
+</button>
+
+</div>
+
+
+    <div class="nav-right">
+   
+ <button class="theme-toggle" onclick="toggleTheme()">
+    <div class="slider-track">
+        <div class="slider-thumb">
+            <i class="fas fa-sun slider-icon"></i>
+        </div>
+    </div>
+</button>
+
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+</header>
+
+
+<div class="container">
+
+<h2 style="margin-bottom:20px;">📦 Orders Received</h2>
+
+<div id="orders">Loading...</div>
+
+</div>
+
+<script>
+
+document.addEventListener("DOMContentLoaded", () => {
+
+/* ===== ACTIVE NAV BUTTON ===== */
+
+const path = window.location.pathname;
+const navButtons = document.querySelectorAll(".nav-btn");
+
+navButtons.forEach(btn => btn.classList.remove("active"));
+
+if(path.includes("seller_dashboard")){
+navButtons[0].classList.add("active");
+}
+else if(path.includes("seller_analytics")){
+navButtons[1].classList.add("active");
+}
+else if(path.includes("seller_orders")){
+navButtons[2].classList.add("active");
+}
+
+
+/* ===== AUTH CHECK ===== */
+
+fetch("/me",{credentials:"include"})
+.then(r=>r.json())
+.then(d=>{
+if(!d.loggedIn || d.user.role!=="seller"){
+location="/";
+}
+document.getElementById("sellerName").textContent=d.user.full_name;
+});
+
+
+/* ===== DARK MODE LOAD ===== */
+
+const saved = localStorage.getItem("sellerTheme");
+
+if(saved === "dark"){
+document.body.classList.add("dark");
+
+const icon = document.querySelector(".slider-icon");
+if(icon){
+icon.classList.remove("fa-sun");
+icon.classList.add("fa-moon");
+}
+}
+
+
+/* ===== LOAD ORDERS ===== */
+
+async function loadOrders(){
+
+const r = await fetch("/seller/orders",{credentials:"include"});
+const d = await r.json();
+
+const box = document.getElementById("orders");
+
+if(!d.success || d.orders.length===0){
+box.innerHTML="<p>No orders yet</p>";
+return;
+}
+
+box.innerHTML="";
+
+d.orders.forEach(o=>{
+
+box.innerHTML += `
+<div class="order-card">
+
+<img src="${o.image}">
+
+<div class="order-info">
+
+<b>${o.product_name}</b>
+
+<div class="order-meta">
+Customer: ${o.customer_name}<br>
+Qty: ${o.quantity}<br>
+Price: ₹${o.price}<br>
+Status: <b>${o.status}</b><br>
+${new Date(o.created_at).toLocaleString()}
+</div>
+
+<div class="status-actions">
+
+<button onclick="toggleDetails(${o.id})">Details</button>
+
+<button class="pending" onclick="updateStatus(${o.id},'pending')">Pending</button>
+
+<button class="paid" onclick="updateStatus(${o.id},'paid')">Paid</button>
+
+<button class="shipped" onclick="updateStatus(${o.id},'shipped')">Shipped</button>
+
+<button class="delivered" onclick="updateStatus(${o.id},'delivered')">Delivered</button>
+
+</div>
+
+<div class="details" id="details-${o.id}">
+<b>Customer Details</b><br>
+Email: ${o.customer_email || "N/A"}<br>
+Mobile: ${o.customer_mobile || "N/A"}<br>
+Order ID: ${o.id}
+</div>
+
+</div>
+</div>
+`;
+});
+
+}
+
+loadOrders();
+
+});
+
+
+/* ===== DETAILS TOGGLE ===== */
+
+function toggleDetails(id){
+
+const box=document.getElementById("details-"+id);
+
+box.style.display = box.style.display==="block" ? "none" : "block";
+
+}
+
+
+/* ===== UPDATE STATUS ===== */
+
+async function updateStatus(id,status){
+
+await fetch("/order/"+id+"/status",{
+method:"PUT",
+headers:{"Content-Type":"application/json"},
+credentials:"include",
+body:JSON.stringify({status})
+});
+
+loadOrders();
+
+}
+
+
+/* ===== DARK MODE TOGGLE ===== */
+
+function toggleTheme(){
+
+document.body.classList.toggle("dark");
+
+const icon = document.querySelector(".slider-icon");
+
+if(document.body.classList.contains("dark")){
+icon.classList.remove("fa-sun");
+icon.classList.add("fa-moon");
+localStorage.setItem("sellerTheme","dark");
+}
+else{
+icon.classList.remove("fa-moon");
+icon.classList.add("fa-sun");
+localStorage.setItem("sellerTheme","light");
+}
+
+}
+
+
+/* ===== LOGOUT ===== */
+
+function logout(){
+
+fetch("/logout",{credentials:"include"})
+.then(()=>{
+
+// prevent back button access
+window.history.replaceState(null,null,"/");
+
+// redirect to login
+window.location.href="/index.html";
+
+});
+
+}
+
+
+/* ===== PREVENT BACK BUTTON ===== */
+
+window.history.pushState(null,null,window.location.href);
+
+window.onpopstate=function(){
+window.history.go(1);
+};
+document.addEventListener("DOMContentLoaded", function () {
+
+const path = window.location.pathname;
+
+const navButtons = document.querySelectorAll(".nav-btn");
+
+navButtons.forEach(btn => {
+
+const link = btn.getAttribute("onclick");
+
+if(link && path.includes(link.replace("location.href='","").replace("'",""))){
+btn.classList.add("active");
+}
+
+});
+
+});
+
+/* ===== NAVBAR SCROLL ===== */
+
+const navbar = document.querySelector(".navbar");
+
+window.addEventListener("scroll",function(){
+
+if(window.scrollY > 50){
+navbar.classList.add("scrolled");
+document.body.style.paddingTop = navbar.offsetHeight + "px";
+}
+else{
+navbar.classList.remove("scrolled");
+document.body.style.paddingTop = "0px";
+}
+
+});
+
+</script>
+
+</body>
+</html>

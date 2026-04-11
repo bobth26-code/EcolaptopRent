@@ -1,0 +1,1093 @@
+create database Ecommerce;
+use Ecommerce;
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role VARCHAR(50) DEFAULT 'user',
+    full_name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    mobile VARCHAR(15) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+
+    address1 TEXT,
+    address2 TEXT,
+    address3 TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ADD pincode VARCHAR(10) AFTER address3
+);
+
+INSERT INTO users (role, full_name, email, mobile, password)
+VALUES ('admin', 'Admin', 'admin@example.com', '9876543210', '$2a$10$vBza6zYy.3AOItF1DoltgOptJGCnnA4zqdDG4tN4luTPcZF7Qf7bu');
+select*from users;
+
+
+
+
+
+
+
+
+-- ## 🛒 PRODUCTS
+
+CREATE TABLE products (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    seller_id INT not null,
+    name VARCHAR(150)not null,
+    description TEXT not null,
+    price DECIMAL(10 , 2 ) not null,
+    stock INT default 1,
+    image VARCHAR(255) not null,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (seller_id)
+        REFERENCES users (id)
+        ON DELETE CASCADE
+);
+select*from products;
+
+-- ## 🛒 CART
+
+
+CREATE TABLE cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+        price DECIMAL(10,2),
+    quantity INT DEFAULT 1,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (product_id) REFERENCES products(id)
+);
+
+-- ## 🧾 ORDERS
+
+
+CREATE TABLE orders (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+       product_id INT,
+          quantity INT DEFAULT 1,
+    total DECIMAL(10,2),
+    status ENUM('pending','paid','shipped','delivered') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+
+
+=======user========
+<!-- Rahul@123 --> 
+ <!-- Fashion@123 -->
+ <!----Mukesh@123--->
+
+Ashish@123
+ 
+============Seller=======
+Genz@123
+
+
+
+
+<script>
+fetch("/me", { credentials: "include" })
+.then(res => res.json())
+.then(data => {
+    if (!data.loggedIn) {
+        window.location.href = "/login.html";
+    }
+});
+</script>
+
+
+
+
+
+
+
+// app.use(express.static("public"));
+// require("dotenv").config();
+
+// const express = require("express");
+// const mysql = require("mysql2");
+// const bcrypt = require("bcrypt");
+// const session = require("express-session");
+// const cookieParser = require("cookie-parser");
+// const cors = require("cors");
+// const path = require("path");
+
+// const app = express();
+
+// /* ================= CONFIG ================= */
+// const PORT = process.env.PORT || 3000;
+// const SESSION_SECRET = process.env.SESSION_SECRET || "ecommerce_secret";
+
+// /* ================= MIDDLEWARE ================= */
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+// app.use(cookieParser());
+
+// app.use(cors({
+//     origin: `http://localhost:${PORT}`,
+//     credentials: true
+// }));
+
+// app.use(session({
+//     name: "ecommerce.sid",
+//     secret: SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//         httpOnly: true,
+//         sameSite: "lax",
+//         maxAge: 1000 * 60 * 60 * 24
+//     }
+// }));
+
+// /* ================= STATIC FILES ================= */
+// app.use(express.static(path.join(__dirname, "public")));
+
+// /* ================= DATABASE ================= */
+// const db = mysql.createPool({
+//     host: process.env.DB_HOST || "localhost",
+//     user: process.env.DB_USER || "root",
+//     password: process.env.DB_PASS || "",
+//     database: process.env.DB_NAME || "Ecommerce",
+//     connectionLimit: 10
+// });
+require("dotenv").config();
+
+const express = require("express");
+const mysql = require("mysql2");
+const bcrypt = require("bcrypt");
+const session = require("express-session");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const path = require("path");
+
+/* ================= CREATE APP ================= */
+const app = express();
+
+/* ================= CONFIG ================= */
+const PORT = process.env.PORT || 3000;
+const SESSION_SECRET = process.env.SESSION_SECRET || "ecommerce_secret";
+
+/* ================= MIDDLEWARE ================= */
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+app.use(cors({
+    origin: `http://localhost:${PORT}`,
+    credentials: true
+}));
+
+/* ================= SESSION ================= */
+app.use(session({
+    name: "ecommerce.sid",
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        httpOnly: true,
+        sameSite: "lax",
+        maxAge: 1000 * 60 * 60 * 24
+    }
+}));
+
+/* ================= STATIC FILES ================= */
+app.use(express.static(path.join(__dirname, "public")));
+
+/* ================= DATABASE ================= */
+const db = mysql.createPool({
+    host: process.env.DB_HOST || "localhost",
+    user: process.env.DB_USER || "root",
+    password: process.env.DB_PASS || "",
+    database: process.env.DB_NAME || "Ecommerce",
+    connectionLimit: 10
+});
+
+db.getConnection((err, conn) => {
+    if (err) {
+        console.error("❌ DB CONNECTION ERROR:", err.message);
+        process.exit(1);
+    }
+    console.log("✅ MySQL Connected");
+    conn.release();
+});
+
+/* ================= REGISTER ================= */
+app.post("/register", async (req, res) => {
+    const { role, full_name, email, mobile, password } = req.body;
+
+    if (!role || !full_name || !email || !mobile || !password) {
+        return res.status(400).json({ success:false, error:"All fields required" });
+    }
+
+    if (!["user","seller","admin"].includes(role)) {
+        return res.status(400).json({ success:false, error:"Invalid role" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    db.query(
+        "SELECT id FROM users WHERE email=? OR mobile=?",
+        [email, mobile],
+        (err, rows) => {
+            if (rows.length > 0) {
+                return res.status(409).json({ success:false, error:"Already registered" });
+            }
+
+            db.query(
+                `INSERT INTO users (role, full_name, email, mobile, password)
+                 VALUES (?,?,?,?,?)`,
+                [role, full_name, email, mobile, hashedPassword],
+                (err, result) => {
+                    if (err) {
+                        return res.status(500).json({ success:false, error:"Insert failed" });
+                    }
+
+                    req.session.user = {
+                        id: result.insertId,
+                        role,
+                        full_name,
+                        email
+                    };
+
+                    res.json({
+                        success: true,
+                        redirect: role === "seller"
+                            ? "/seller_dashboard.html"
+                            : "/homepage.html"
+                    });
+                }
+            );
+        }
+    );
+});
+
+/* ================= LOGIN ================= */
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+
+    db.query(
+        "SELECT * FROM users WHERE email=? LIMIT 1",
+        [email],
+        async (err, rows) => {
+            if (rows.length === 0) {
+                return res.status(401).json({ success:false });
+            }
+
+            const user = rows[0];
+            const match = await bcrypt.compare(password, user.password);
+            if (!match) {
+                return res.status(401).json({ success:false });
+            }
+
+            req.session.user = {
+                id: user.id,
+                role: user.role,
+                full_name: user.full_name,
+                email: user.email
+            };
+
+            let redirect = "/homepage.html";
+            if (user.role === "seller") redirect = "/seller_dashboard.html";
+            if (user.role === "admin") redirect = "/admin_dashboard.html";
+
+            res.json({ success:true, redirect });
+        }
+    );
+});
+
+/* ================= SELLER ADD PRODUCT ================= */
+app.post("/seller/product", (req, res) => {
+    if (!req.session.user || req.session.user.role !== "seller") {
+        return res.status(403).json({ success:false });
+    }
+
+    const { name, description, category, gender, price, stock, image } = req.body;
+
+    db.query(
+        `INSERT INTO products
+        (seller_id,name,description,category,gender,price,stock,image)
+        VALUES (?,?,?,?,?,?,?,?)`,
+        [
+            req.session.user.id,
+            name,
+            description,
+            category,
+            gender || "Unisex",
+            price,
+            stock || 1,
+            image
+        ],
+        err => {
+            if (err) return res.status(500).json({ success:false });
+            res.json({ success:true });
+        }
+    );
+});
+
+/* ================= SELLER VIEW PRODUCTS ================= */
+app.get("/seller/products", (req, res) => {
+    if (!req.session.user || req.session.user.role !== "seller") {
+        return res.status(403).json({ success:false });
+    }
+
+    db.query(
+        "SELECT * FROM products WHERE seller_id=? ORDER BY created_at DESC",
+        [req.session.user.id],
+        (err, rows) => {
+            res.json({ success:true, products: rows });
+        }
+    );
+});
+
+/* ================= UPDATE PRODUCT ================= */
+app.put("/seller/product/:id", (req, res) => {
+    if (!req.session.user || req.session.user.role !== "seller") {
+        return res.status(403).json({ success:false });
+    }
+
+    const { name, description, category, gender, price, stock, image } = req.body;
+
+    db.query(
+        `UPDATE products SET
+        name=?,description=?,category=?,gender=?,price=?,stock=?,image=?
+        WHERE id=? AND seller_id=?`,
+        [
+            name, description, category, gender, price, stock, image,
+            req.params.id, req.session.user.id
+        ],
+        (err, r) => {
+            res.json({ success: r.affectedRows > 0 });
+        }
+    );
+});
+
+/* ================= DELETE PRODUCT ================= */
+app.delete("/seller/product/:id", (req, res) => {
+    if (!req.session.user || req.session.user.role !== "seller") {
+        return res.status(403).json({ success:false });
+    }
+
+    db.query(
+        "DELETE FROM products WHERE id=? AND seller_id=?",
+        [req.params.id, req.session.user.id],
+        (err, r) => {
+            res.json({ success: r.affectedRows > 0 });
+        }
+    );
+});
+
+
+
+
+// UPDATE ORDER STATUS (Seller / Admin)
+app.put("/order/:id/status", (req, res) => {
+
+    if (!req.session.user || !["seller", "admin"].includes(req.session.user.role)) {
+        return res.status(403).json({ success: false, error: "Unauthorized" });
+    }
+
+    const { status } = req.body;
+    const orderId = req.params.id;
+
+    const allowed = ["pending", "paid", "shipped", "delivered"];
+    if (!allowed.includes(status)) {
+        return res.status(400).json({ success: false, error: "Invalid status" });
+    }
+
+    let sql, params;
+
+    // 🔐 ADMIN → can update any order
+    if (req.session.user.role === "admin") {
+        sql = `UPDATE orders SET status=? WHERE id=?`;
+        params = [status, orderId];
+    }
+
+    // 🔐 SELLER → only their product orders
+    if (req.session.user.role === "seller") {
+        sql = `
+            UPDATE orders o
+            JOIN products p ON o.product_id = p.id
+            SET o.status = ?
+            WHERE o.id = ? AND p.seller_id = ?
+        `;
+        params = [status, orderId, req.session.user.id];
+    }
+
+    db.query(sql, params, (err, result) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false });
+        }
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({
+                success: false,
+                error: "Order not found or access denied"
+            });
+        }
+
+        res.json({ success: true, message: "Order status updated" });
+    });
+});
+
+
+
+/* ========== SELLER VIEW ORDERS ========== */
+app.get("/seller/orders", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "seller") {
+        return res.status(403).json({ success: false });
+    }
+
+    const sellerId = req.session.user.id;
+
+    const sql = `
+        SELECT 
+            o.id,
+            o.quantity,
+            o.status,
+            o.created_at,
+            p.name AS product_name,
+            p.image,
+            u.full_name AS customer_name
+        FROM orders o
+        JOIN products p ON o.product_id = p.id
+        JOIN users u ON o.user_id = u.id
+        WHERE p.seller_id = ?
+        ORDER BY o.created_at DESC
+    `;
+
+    db.query(sql, [sellerId], (err, rows) => {
+        if (err) {
+            console.error(err);
+            return res.json({ success: false });
+        }
+
+        res.json({
+            success: true,
+            orders: rows
+        });
+    });
+});
+
+
+
+
+
+
+/* ================= USER VIEW PRODUCTS ================= */
+app.get("/products", (req, res) => {
+
+    const sql = `
+        SELECT 
+            p.*, 
+            u.full_name AS seller_name
+        FROM products p
+        JOIN users u ON p.seller_id = u.id
+        ORDER BY p.created_at DESC
+    `;
+
+    db.query(sql, (err, rows) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({
+                success: false,
+                error: "Failed to load products"
+            });
+        }
+
+        res.json({
+            success: true,
+            products: rows
+        });
+    });
+});
+
+
+
+
+
+
+
+/* ================= ADD TO CART ================= */
+app.post("/cart", (req, res) => {
+
+    // 🔐 User auth
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({
+            success: false,
+            error: "User access only"
+        });
+    }
+
+    const { product_id } = req.body;
+    const userId = req.session.user.id;
+
+    if (!product_id) {
+        return res.status(400).json({
+            success: false,
+            error: "Product ID required"
+        });
+    }
+
+    // 1️⃣ Check if product already in cart
+    const checkSql = `
+        SELECT id, quantity 
+        FROM cart 
+        WHERE user_id = ? AND product_id = ?
+    `;
+
+    db.query(checkSql, [userId, product_id], (err, rows) => {
+        if (err) {
+            return res.status(500).json({ success: false });
+        }
+
+        // 2️⃣ Increase quantity
+        if (rows.length > 0) {
+            db.query(
+                "UPDATE cart SET quantity = quantity + 1 WHERE id = ?",
+                [rows[0].id],
+                err => {
+                    if (err) return res.json({ success: false });
+                    res.json({ success: true, message: "Quantity updated" });
+                }
+            );
+        } 
+        // 3️⃣ Insert new
+        else {
+            db.query(
+                `
+                INSERT INTO cart (user_id, product_id, price, quantity)
+                SELECT ?, id, price, 1
+                FROM products
+                WHERE id = ?
+                `,
+                [userId, product_id],
+                err => {
+                    if (err) return res.json({ success: false });
+                    res.json({ success: true, message: "Added to cart" });
+                }
+            );
+        }
+    });
+});
+
+
+
+
+
+
+/*========get user =======*/
+app.get("/cart", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success:false });
+    }
+
+    const sql = `
+        SELECT 
+            c.id,
+            p.name,
+            p.image,
+            c.price,
+            c.quantity,
+            (c.price * c.quantity) AS subtotal
+        FROM cart c
+        JOIN products p ON c.product_id = p.id
+        WHERE c.user_id = ?
+    `;
+
+    db.query(sql, [req.session.user.id], (err, rows) => {
+        if (err) return res.json({ success:false });
+
+        let total = 0;
+
+        rows.forEach(i => {
+            total += Number(i.subtotal); // ✅ FORCE NUMBER
+        });
+
+        res.json({
+            success: true,
+            cart: rows,
+            total: total.toFixed(2) // ✅ 2 decimals
+        });
+    });
+});
+
+
+
+
+
+
+/*========update cart Quantity ====*/
+app.put("/cart/:id", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success:false });
+    }
+
+    const { action } = req.body;
+
+    let sql = "";
+    if (action === "inc") {
+        sql = "UPDATE cart SET quantity = quantity + 1 WHERE id=? AND user_id=?";
+    } else if (action === "dec") {
+        sql = "UPDATE cart SET quantity = quantity - 1 WHERE id=? AND user_id=?";
+    }
+
+    db.query(sql, [req.params.id, req.session.user.id], err => {
+        if (err) return res.json({ success:false });
+
+        // remove if quantity <= 0
+        db.query(
+            "DELETE FROM cart WHERE quantity <= 0",
+            ()=> res.json({ success:true })
+        );
+    });
+});
+
+
+
+
+
+// PLACE ORDER
+app.post("/order", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success: false });
+    }
+
+    const userId = req.session.user.id;
+
+    // get cart items
+    db.query(
+        "SELECT product_id, quantity FROM cart WHERE user_id=?",
+        [userId],
+        (err, cart) => {
+
+            if (err || cart.length === 0) {
+                return res.json({ success: false, error: "Cart empty" });
+            }
+
+            // prepare values
+            const values = cart.map(i => [
+                userId,
+                i.product_id,
+                i.quantity
+            ]);
+
+            // insert into orders
+            db.query(
+                `INSERT INTO orders (user_id, product_id, quantity)
+                 VALUES ?`,
+                [values],
+                (err) => {
+
+                    if (err) {
+                        return res.json({ success: false });
+                    }
+
+                    // clear cart
+                    db.query(
+                        "DELETE FROM cart WHERE user_id=?",
+                        [userId]
+                    );
+
+                    res.json({ success: true });
+                }
+            );
+        }
+    );
+});
+
+
+
+
+app.get("/user/orders", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success: false });
+    }
+
+    const userId = req.session.user.id;
+
+    const sql = `
+        SELECT 
+            o.id,
+            o.quantity,
+            o.status,
+            o.created_at,
+            p.name AS product_name,
+            p.image
+        FROM orders o
+        JOIN products p ON o.product_id = p.id
+        WHERE o.user_id = ?
+        ORDER BY o.created_at DESC
+    `;
+
+    db.query(sql, [userId], (err, rows) => {
+        if (err) {
+            console.error(err);
+            return res.json({ success:false });
+        }
+
+        res.json({ success:true, orders:rows });
+    });
+});
+
+// 
+
+app.get("/orders", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success: false });
+    }
+
+    const sql = `
+        SELECT 
+            o.id,
+            o.quantity,
+            o.status,
+            o.created_at,
+            p.name,
+            p.price,
+            p.image
+        FROM orders o
+        JOIN products p ON o.product_id = p.id
+        WHERE o.user_id = ?
+        ORDER BY o.created_at DESC
+    `;
+
+    db.query(sql, [req.session.user.id], (err, rows) => {
+        if (err) return res.json({ success: false });
+        res.json({ success: true, orders: rows });
+    });
+});
+
+
+
+
+
+
+
+/* ================= REMOVE FROM CART ================= */
+app.delete("/cart/:id", (req, res) => {
+
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success: false });
+    }
+
+    db.query(
+        "DELETE FROM cart WHERE id=? AND user_id=?",
+        [req.params.id, req.session.user.id],
+        err => {
+            if (err) return res.json({ success: false });
+            res.json({ success: true });
+        }
+    );
+});
+
+
+
+
+
+/*======== CLEAR CART (remove all items)========  */
+app.delete("/cart", (req, res) => {
+    if (!req.session.user || req.session.user.role !== "user") {
+        return res.status(403).json({ success:false });
+    }
+
+    db.query(
+        "DELETE FROM cart WHERE user_id=?",
+        [req.session.user.id],
+        err => {
+            if (err) return res.json({ success:false });
+            res.json({ success:true });
+        }
+    );
+});
+
+
+
+
+
+
+/* ================= ME ================= */
+app.get("/me", (req, res) => {
+    res.setHeader("Cache-Control","no-store");
+    if (!req.session.user) {
+        return res.json({ loggedIn:false });
+    }
+    res.json({ loggedIn:true, user:req.session.user });
+});
+
+/* ================= LOGOUT ================= */
+app.get("/logout", (req, res) => {
+    req.session.destroy(() => {
+        res.clearCookie("ecommerce.sid");
+        res.json({ success:true });
+    });
+});
+
+/* ================= START ================= */
+app.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
+});
+
+
+
+
+
+// regisytration hmtl ====
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crescendo - Login / Register</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#1F3C73,#2E4A87,#4C6FB3);
+    padding:20px;
+}
+
+.container{
+    width:100%;
+    max-width:420px;
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(20px);
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.25);
+    color:#fff;
+}
+
+h2{
+    text-align:center;
+    margin-bottom:25px;
+}
+
+.toggle{
+    display:flex;
+    background:rgba(255,255,255,0.2);
+    border-radius:50px;
+    margin-bottom:25px;
+    overflow:hidden;
+}
+
+.toggle button{
+    flex:1;
+    padding:10px;
+    border:none;
+    background:transparent;
+    color:#fff;
+    cursor:pointer;
+    font-weight:600;
+}
+
+.toggle button.active{
+    background:#fff;
+    color:#1F3C73;
+}
+
+form{
+    display:none;
+    flex-direction:column;
+}
+
+form.active{
+    display:flex;
+}
+
+input, select{
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+}
+
+button{
+    background:#fff;
+    color:#1F3C73;
+    padding:12px;
+    border:none;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#e5e7eb;
+}
+
+pre{
+    color:#ffdada;
+    margin-top:10px;
+    white-space:pre-wrap;
+}
+</style>
+</head>
+<body>
+
+<!-- 🔐 /me CHECK (UNCHANGED LOGIC) -->
+<script>
+fetch("/me", { credentials: "include", cache: "no-store" })
+.then(res => res.json())
+.then(data => {
+    if (data.loggedIn) {
+        if (data.user.role === "seller") {
+            window.location.replace("/seller_dashboard.html");
+        } else if (data.user.role === "admin") {
+            window.location.replace("/admin_dashboard.html");
+        } else {
+            window.location.replace("/homepage.html");
+        }
+    }
+});
+</script>
+
+<div class="container">
+<h2>Crescendo</h2>
+
+<div class="toggle">
+    <button id="loginBtn" class="active">Login</button>
+    <button id="registerBtn">Register</button>
+</div>
+
+<!-- LOGIN FORM (Your existing login logic assumed working) -->
+<form id="loginForm" class="active">
+    <input id="login_email" type="email" placeholder="Email" required>
+    <input id="login_password" type="password" placeholder="Password" required>
+    <button type="submit">Login</button>
+    <pre id="loginOutput"></pre>
+</form>
+
+<!-- REGISTER FORM (YOUR CODE – NOT MODIFIED) -->
+<form id="registerForm">
+    <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="user">User</option>
+        <option value="seller">Seller</option>
+    </select>
+
+    <input id="full_name" placeholder="Full Name" required>
+    <input id="email" type="email" placeholder="Email" required>
+    <input id="mobile" placeholder="Mobile" required>
+    <input id="password" type="password" placeholder="Password" required>
+
+    <button type="submit">Register</button>
+    <pre id="output"></pre>
+</form>
+
+</div>
+
+<script>
+const loginBtn = document.getElementById("loginBtn");
+const registerBtn = document.getElementById("registerBtn");
+const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
+
+loginBtn.onclick = () => {
+    loginBtn.classList.add("active");
+    registerBtn.classList.remove("active");
+    loginForm.classList.add("active");
+    registerForm.classList.remove("active");
+};
+
+registerBtn.onclick = () => {
+    registerBtn.classList.add("active");
+    loginBtn.classList.remove("active");
+    registerForm.classList.add("active");
+    loginForm.classList.remove("active");
+};
+
+/* REGISTER LOGIC — EXACTLY SAME AS YOU GAVE */
+const form = document.getElementById("registerForm");
+const output = document.getElementById("output");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    output.textContent = "";
+
+    const role = document.getElementById("role").value;
+
+    if (!role) {
+        output.textContent = "❌ Please select a role";
+        return;
+    }
+
+    const body = {
+        role,
+        full_name: document.getElementById("full_name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        mobile: document.getElementById("mobile").value.trim(),
+        password: document.getElementById("password").value
+    };
+
+    try {
+        const res = await fetch("/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        const data = await res.json();
+
+        if (data.success) {
+
+            if (data.redirect) {
+                window.location.replace(data.redirect);
+                return;
+            }
+
+            if (role === "seller") {
+                window.location.replace("/seller_dashboard.html");
+            } else {
+                window.location.replace("/homepage.html");
+            }
+        } else {
+            output.textContent = "❌ " + (data.error || "Registration failed");
+        }
+
+    } catch (err) {
+        output.textContent = "❌ Server error. Try again.";
+    }
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+# PORT=3000
+# DB_HOST=mysql-leaselogic.alwaysdata.net
+# DB_USER=leaselogic
+# DB_PASS=Zxcvbnmlp09
+# DB_NAME=leaselogic_db
+# SESSION_SECRET=ecommerce_secret

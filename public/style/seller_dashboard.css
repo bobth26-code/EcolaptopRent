@@ -1,0 +1,497 @@
+    
+   /* ===== RESET ===== */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:#f1f5f9;
+    transition:0.3s ease;
+    min-height:100vh;
+}
+
+/* ===== DARK MODE ===== */
+body.dark{
+    background:#0f172a;
+    color:#f1f5f9;
+}
+
+/* ===== NAVBAR ===== */
+/* ===== NAVBAR ===== */
+.navbar {
+    width: 90%;
+    margin: 30px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 30px;
+    background: #ffffff;
+    color: #111827;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.35s ease;
+    position: relative;
+    z-index: 1000;
+}
+
+.navbar.scrolled {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    padding: 12px 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+/* DARK MODE NAVBAR */
+body.dark .navbar {
+         /* background: #111827; */
+            background: #1f2937;
+}
+
+body.dark .navbar.scrolled {
+    background: #0f172a;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+}
+
+/* NAV LEFT */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo {
+    width: 55px;
+    border-radius: 10px;
+}
+
+.seller-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* NAV CENTER */
+.nav-center {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-btn {
+    background: #1f2937;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.nav-btn:hover {
+    background: #374151;
+}
+
+.nav-btn.active {
+    background: #2563eb;
+}
+
+/* NAV RIGHT */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* ===== LOGOUT BUTTON ===== */
+.logout-btn {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s ease;
+    box-shadow: 0 6px 15px rgba(220, 38, 38, 0.3);
+}
+
+.logout-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5);
+}
+
+.logout-btn:active {
+    transform: scale(0.96);
+}
+
+/* ===== TOGGLE ===== */
+.theme-toggle {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Track */
+.slider-track {
+    width: 70px;
+    height: 36px;
+    background: linear-gradient(135deg, #facc15, #f59e0b);
+    border-radius: 50px;
+    position: relative;
+    margin-left: 70px;
+    transition: 0.4s ease;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.2);
+}
+
+/* Thumb */
+.slider-thumb {
+    width: 30px;
+    height: 30px;
+    background: #ffffff;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.4s cubic-bezier(.4,0,.2,1);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* Icon */
+.slider-icon {
+    font-size: 14px;
+    color: #f59e0b;
+    transition: 0.3s ease;
+}
+.slider-thumb {
+    transition: 0.4s cubic-bezier(.4,0,.2,1);
+}
+
+.slider-thumb i {
+    transition: 0.4s ease;
+}
+
+body.dark .slider-thumb i {
+    transform: rotate(360deg);
+}
+
+/* 🌙 DARK MODE STYLE */
+body.dark .slider-track {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+}
+
+body.dark .slider-thumb {
+    left: 37px;
+    background: #111827;
+}
+
+body.dark .slider-icon {
+    color: #60a5fa;
+}
+
+
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.logo{
+    width:55px;
+    border-radius:10px;
+}
+
+.seller-name{
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:.5px;
+}
+.seller-icon {
+    color: #2563eb;
+    font-size: 18px;
+}
+
+/* CENTER NAV */
+.nav-center{
+    display:flex;
+    gap:15px;
+}
+
+.nav-btn{
+    background:#1f2937;
+    color:#fff;
+    border:none;
+    padding:8px 18px;
+    border-radius:8px;
+    cursor:pointer;
+    transition:0.3s ease;
+    font-size:14px;
+}
+
+.nav-btn:hover{
+    background:#374151;
+}
+
+.nav-btn.active{
+    background:#2563eb;
+}
+
+/* RIGHT NAV */
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+
+
+/* ===== CONTAINER ===== */
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
+}
+
+/* ===== HEADINGS ===== */
+h2{
+    margin-bottom:20px;
+    font-weight:600;
+}
+
+/* ===== PRODUCT FORM ===== */
+/* ===== PRODUCT FORM ===== */
+.product-form{
+    background:#ffffff;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+    margin-bottom:50px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+body.dark .product-form{
+    background:#1e293b;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    font-weight:600;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #cbd5e1;
+    font-size:14px;
+    transition:.3s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus{
+    border-color:#2563eb;
+    outline:none;
+}
+
+.form-group textarea{
+    resize:none;
+    height:110px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+.submit-btn{
+    grid-column:1/-1;
+    background:linear-gradient(90deg,#2563eb,#1d4ed8);
+    color:#fff;
+    border:none;
+    padding:14px;
+    border-radius:14px;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.submit-btn:hover{
+    transform:scale(1.02);
+}
+
+/* DARK MODE INPUTS */
+body.dark input,
+body.dark textarea,
+body.dark select{
+    background:#334155;
+    border:1px solid #475569;
+    color:#fff;
+}
+
+
+textarea{
+    resize:none;
+    height:100px;
+}
+
+/* FULL WIDTH BUTTON */
+form button{
+    grid-column:1/-1;
+    background:linear-gradient(90deg,#2563eb,#1d4ed8);
+    color:#fff;
+    border:none;
+    padding:14px;
+    border-radius:14px;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s ease;
+}
+
+form button:hover{
+    transform:scale(1.02);
+}
+
+/* ===== SUCCESS / ERROR ===== */
+.success{
+    color:#16a34a;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+.error{
+    color:#dc2626;
+    font-weight:600;
+    margin-bottom:20px;
+}
+
+/* ===== PRODUCT GRID ===== */
+#productList{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+    gap:25px;
+}
+
+/* ===== PRODUCT CARD ===== */
+.product-card{
+    background:#ffffff;
+    padding:20px;
+    border-radius:20px;
+    box-shadow:0 15px 30px rgba(0,0,0,.12);
+    transition:.4s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+
+
+
+
+body.dark .product-card{
+    background:#1e293b;
+}
+
+.product-card:hover{
+    transform:translateY(-8px);
+}
+
+.product-card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    border-radius:16px;
+    margin-bottom:15px;
+}
+
+.product-card b{
+    font-size:16px;
+}
+
+.product-card .small{
+    font-size:13px;
+    color:#64748b;
+    margin:8px 0;
+}
+
+body.dark .small{
+    color:#94a3b8;
+}
+
+/* ===== PRODUCT ACTIONS ===== */
+.product-actions{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.btn-edit{
+    flex:1;
+    background:#2563eb;
+    color:#fff;
+    border:none;
+    padding:8px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn-edit:hover{
+    background:#1d4ed8;
+}
+
+.btn-delete{
+    flex:1;
+    background:#dc2626;
+    color:#fff;
+    border:none;
+    padding:8px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.btn-delete:hover{
+    background:#b91c1c;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:900px){
+    form{
+        grid-template-columns:1fr;
+    }
+
+    .nav-center{
+        display:none;
+    }
+}
+
+
+        .success {
+            color: #16a34a;
+            font-weight: 600
+        }
+
+        .error {
+            color: #dc2626;
+            font-weight: 600
+        }
+
+        .small {
+            font-size: 13px
+        }

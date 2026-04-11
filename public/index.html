@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LeaseLogic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #E2E2E2;
+     
+
+        }
+
+        /* ================= NAVBAR ================= */
+
+
+        .navbar {
+            width: 90%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 15px 40px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: 0.3s ease;
+            position: relative;
+            z-index: 1000;
+        }
+
+        /* When Scrolled */
+        .navbar.scrolled {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo {
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sign-btn {
+            background: #2563eb;
+            color: #fff;
+            padding: 8px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* ================= HERO ================= */
+
+        .hero {
+            width: 90%;
+            margin: 0 auto 40px auto;
+            background: #1e3a8a;
+            border-radius: 20px;
+            padding: 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #fff;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero-text p {
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .hero button {
+            background: #fff;
+            color: #1e3a8a;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .hero img {
+            width: 380px;
+            border-radius: 15px;
+        }
+
+        /* Smooth Fade Animation */
+        .hero,
+        .section,
+        .experience {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.8s ease forwards;
+        }
+
+        .section:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .section:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .experience {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Navbar Scroll Shadow */
+        .navbar.scrolled {
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Button Hover Effect */
+        .sign-btn {
+            transition: 0.3s ease;
+        }
+
+        .sign-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Hero Button Hover */
+        .hero button {
+            transition: 0.3s ease;
+        }
+
+        .hero button:hover {
+            transform: scale(1.05);
+        }
+
+        /* Card Hover Effect */
+        .card {
+            transition: 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Link Hover */
+        .nav-links a {
+            transition: 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+
+        /* ================= SECTION ================= */
+
+        .section {
+            width: 90%;
+            margin: 40px auto;
+        }
+
+        .section h2 {
+            margin-bottom: 20px;
+        }
+
+        .products {
+            display: flex;
+            gap: 25px;
+        }
+
+        .card {
+            flex: 1;
+            background: #fff;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .card img {
+            width: 160px;
+            height: 160px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .card h4 {
+            margin-bottom: 5px;
+        }
+
+        .card a {
+            text-decoration: none;
+            color: #2563eb;
+            font-size: 14px;
+        }
+
+        /* ================= STATS SECTION ================= */
+
+        .stats-wrapper {
+            width: 90%;
+            margin: 60px auto;
+        }
+
+        .stats-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            text-align: center;
+            align-items: stretch;
+        }
+
+
+        .stat-card {
+            background: #E5E8F1;
+            padding: 35px 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: 0.4s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-number {
+            font-size: 38px;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .stat-desc {
+            font-size: 14px;
+            color: #666;
+        }
+
+        /* ================= EXPERIENCE ================= */
+
+        .experience {
+            width: 90%;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .features {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 30px;
+        }
+
+        .feature {
+            width: 30%;
+        }
+
+        .feature i {
+            margin-bottom: 10px;
+            transition: 0.3s;
+        }
+
+        .feature:hover i {
+            transform: scale(1.2);
+        }
+
+        .feature h4 {
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <div class="navbar">
+        <div class="logo">LeaseLogic</div>
+
+        <ul class="nav-links">
+            <li><a href="login.html">Home</a></li>
+            <li><a href="login.html">Rental Laptop</a></li>
+     
+            <li><a href="login.html">Rental Monitor</a></li>
+            <li><a href="login.html">Rental Projector</a></li>
+            <li><a href="login.html">Rental Tablet</a></li>
+        </ul>
+
+        <div class="nav-right">
+
+            <a href="login.html">
+                <button class="sign-btn">Sign In</button>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- ================= HERO ================= -->
+    <div class="hero">
+        <div class="hero-text">
+            <h1>MEET THE NEW TECHNOLOGY<br>For Everyone</h1>
+            <p>Level up your work</p>
+            <a href="/"> <button>Shop Now</button< /a>
+
+        </div>
+
+        <img src="https://cdn.mos.cms.futurecdn.net/pyL3b8cis5dcmUvgbe9ygV-2000-80.jpg"Family Fashion">
+    </div>
+
+    <!-- ================= SHOP SECTION 1 ================= -->
+    <div class="section">
+        <h2>Shop</h2>
+
+        <div class="products">
+            <div class="card">
+                <img src="https://vsprod.vijaysales.com/media/catalog/product/2/3/236787_1_.jpg?optimize=medium&fit=bounds&height=250&width=250">
+                <h4>Laptop</h4>
+                <a href="login.html">View Accessories</a>
+            </div>
+
+            <div class="card">
+                <img src="https://abcom.in/images/products/1735280475_1.avif">
+                <h4>Desktop</h4>
+                <a href="login.html">View More</a>
+            </div>
+
+            <div class="card">
+                <img src="https://abcom.in/images/products/1734430220_R27i1.webp">
+                <h4>Monitor</h4>
+                <a href="login.html">View More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= SHOP SECTION 2 ================= -->
+    <div class="section">
+        <h2>Shop More</h2>
+
+        <div class="products">
+            <div class="card">
+                <img src="https://image.benq.com/is/image/benqco/gp520-gallery2?$ResponsivePreset$&fmt=png-alpha">
+                <h4>Projector</h4>
+                <a href="login.html">View More</a>
+            </div>
+
+            <div class="card">
+                <img src="https://vsprod.vijaysales.com/media/catalog/product/2/4/249057_1_.jpg?optimize=medium&fit=bounds&height=500&width=500">
+                <h4>Tablet</h4>
+                <a href="login.html">$50 Store</a>
+            </div>
+
+            <div class="card">
+                <img src="https://www.simplyshopping.in/cdn/shop/files/3770_2048x2048.jpg?v=1730183331">
+                <h4>Printer</h4>
+                <a href="login.html">View More</a>
+            </div>
+        </div>
+    </div>
+    <!-- ================= STATS SECTION ================= -->
+    <div class="stats-wrapper">
+
+        <h2 style="text-align:center; margin-bottom:30px;">Our Achievements</h2>
+
+        <div class="stats-section">
+
+            <div class="stat-card">
+                <div class="stat-number" data-target="1200">0</div>
+                <div class="stat-label">Happy Customers</div>
+                <div class="stat-desc">
+                    Thousands of satisfied customers trust Crescendo for quality fashion and fast delivery.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number" data-target="350">0</div>
+                <div class="stat-label">Products Available</div>
+                <div class="stat-desc">
+                    Explore a wide range of premium clothing, footwear, and accessories.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number" data-target="98">0</div>
+                <div class="stat-label">Positive Reviews (%)</div>
+                <div class="stat-desc">
+                    Our customers love our products and consistently rate us highly.
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-number" data-target="24">0</div>
+                <div class="stat-label">Support Hours</div>
+                <div class="stat-desc">
+                    Dedicated support team available to assist you anytime.
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ================= EXPERIENCE ================= -->
+    <div class="experience">
+        <h2>Experience Trends</h2>
+
+        <div class="features">
+
+            <div class="feature">
+                <i class="fa-solid fa-truck-fast" style="font-size:30px; color:#2563eb;"></i>
+                <h4>Free Shipping</h4>
+                <p>On all orders over ₹999</p>
+            </div>
+
+            <div class="feature">
+                <i class="fa-solid fa-rotate-left" style="font-size:30px; color:#2563eb;"></i>
+                <h4>Easy Returns</h4>
+                <p>30 days hassle-free return policy</p>
+            </div>
+
+            <div class="feature">
+                <i class="fa-solid fa-shield-halved" style="font-size:30px; color:#2563eb;"></i>
+                <h4>Secure Payment</h4>
+                <p>100% secure & encrypted checkout</p>
+            </div>
+
+        </div>
+
+
+        <footer>
+            © 2026 Crescendo Fashion
+        </footer>
+    </div>
+
+    <script>
+        const navbar = document.querySelector(".navbar");
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 50) {
+                navbar.classList.add("scrolled");
+                document.body.style.paddingTop = navbar.offsetHeight + "px";
+            } else {
+                navbar.classList.remove("scrolled");
+                document.body.style.paddingTop = "0px";
+            }
+        });
+
+
+function logout() {
+
+    fetch("/logout", {
+        method: "POST",
+        credentials: "include"
+    }).then(() => {
+
+        // clear client storage
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // prevent back navigation
+        window.history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            window.location.replace("/index.html");
+        };
+
+        // redirect to homepage
+        window.location.replace("/index.html");
+
+    });
+}
+
+        const counters = document.querySelectorAll(".stat-number");
+        const speed = 200;
+
+        counters.forEach(counter => {
+            const updateCount = () => {
+                const target = +counter.getAttribute("data-target");
+                const count = +counter.innerText;
+                const increment = target / speed;
+
+                if (count < target) {
+                    counter.innerText = Math.ceil(count + increment);
+                    setTimeout(updateCount, 20);
+                } else {
+                    counter.innerText = target + "+";
+                }
+            };
+
+            updateCount();
+        });
+fetch("/me",{credentials:"include"})
+.then(r=>r.json())
+.then(d=>{
+
+if(d.loggedIn){
+
+if(d.user.role==="seller"){
+location.href="/seller_dashboard.html";
+}
+
+else if(d.user.role==="user"){
+location.href="/homepage.html";
+}
+
+else if(d.user.role==="admin"){
+location.href="/admin_dashboard.html";
+}
+
+}
+
+});
+
+    </script>
+</body>
+
+</html>

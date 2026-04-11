@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>User Profile</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+body{
+    font-family:"Segoe UI", Arial, sans-serif;
+    background:linear-gradient(135deg,#f1f5f9,#e2e8f0);
+    padding:30px;
+}
+
+/* NAVBAR */
+.navbar{
+    background:#0f172a;
+    color:#fff;
+    padding:14px 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    border-radius:14px;
+    margin-bottom:30px;
+    box-shadow:0 8px 20px rgba(0,0,0,.2);
+}
+
+.nav-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:18px;
+    font-weight:600;
+}
+
+.nav-left i{
+    color:#38bdf8;
+}
+
+.brand{
+    letter-spacing:.5px;
+}
+
+.nav-right{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:15px;
+}
+
+.nav-right i{
+    font-size:20px;
+    color:#38bdf8;
+}
+
+/* Layout */
+.profile{
+    max-width:900px;
+    margin:auto;
+}
+
+/* Card */
+.profile-card{
+    background:#fff;
+    padding:22px;
+    border-radius:14px;
+    box-shadow:0 10px 25px rgba(0,0,0,.08);
+    margin-bottom:25px;
+}
+
+/* Profile info */
+.profile-card h2{
+    margin:0 0 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#0f172a;
+}
+
+.info{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:12px;
+}
+
+.info p{
+    margin:6px 0;
+    color:#334155;
+}
+
+/* Section title */
+.section-title{
+    font-size:20px;
+    margin-bottom:15px;
+    font-weight:600;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#0f172a;
+}
+
+/* Address grid */
+.address-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:18px;
+}
+
+.box{
+    background:#f8fafc;
+    padding:16px;
+    border-radius:12px;
+    box-shadow:0 6px 15px rgba(0,0,0,.06);
+    display:flex;
+    flex-direction:column;
+}
+
+.box b{
+    margin-bottom:6px;
+    color:#0f172a;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    font-size:14px;
+}
+
+/* Textarea */
+textarea{
+    width:100%;
+    min-height:70px;
+    max-height:120px;
+    padding:8px 10px;
+    border-radius:8px;
+    border:1px solid #cbd5e1;
+    resize:vertical;
+    font-size:14px;
+    background:#fff;
+}
+
+textarea:focus{
+    outline:none;
+    border-color:#2563eb;
+    box-shadow:0 0 0 2px rgba(37,99,235,.15);
+}
+
+/* Buttons */
+.actions{
+    margin-top:10px;
+    display:flex;
+    gap:10px;
+}
+
+button{
+    padding:7px 14px;
+    border-radius:6px;
+    border:none;
+    cursor:pointer;
+    font-size:13px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+}
+
+.save{
+    background:#16a34a;
+    color:#fff;
+}
+
+.save:hover{
+    background:#15803d;
+}
+
+.delete{
+    background:#dc2626;
+    color:#fff;
+}
+
+.delete:hover{
+    background:#b91c1c;
+}
+
+/* Mobile */
+@media(max-width:600px){
+    body{ padding:15px; }
+    .navbar{ border-radius:0; }
+}
+</style>
+</head>
+
+<body>
+    <script>
+
+fetch("/me", { credentials: "include" })
+.then(r => r.json())
+.then(d => {
+
+    if (!d.loggedIn || d.user.role !== "user") {
+        window.location.href = "index.html";
+    }
+
+})
+.catch(() => {
+    window.location.href = "index.html";
+});
+
+</script>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div class="nav-left">
+        <i class="fa-solid fa-store"></i>
+        <span class="brand">MyStore</span>
+    </div>
+    <div class="nav-right">
+        <i class="fa-solid fa-user-circle"></i>
+        <span id="username"></span>
+    </div>
+</div>
+
+<div class="profile">
+
+    <!-- PROFILE INFO -->
+    <div class="profile-card">
+        <h2><i class="fa-solid fa-user"></i> User Profile</h2>
+        <div class="info">
+            <p><b><i class="fa-solid fa-id-card"></i> Name:</b> <span id="name"></span></p>
+            <p><b><i class="fa-solid fa-envelope"></i> Email:</b> <span id="email"></span></p>
+            <p><b><i class="fa-solid fa-phone"></i> Mobile:</b> <span id="mobile"></span></p>
+        </div>
+    </div>
+
+    <!-- ADDRESSES -->
+    <div class="profile-card">
+        <div class="section-title">
+            <i class="fa-solid fa-location-dot"></i> Saved Addresses
+        </div>
+        <div id="addresses" class="address-grid"></div>
+    </div>
+
+</div>
+
+<script>
+fetch("/me", { credentials: "include" })
+.then(res => res.json())
+.then(data => {
+    if (!data.loggedIn) {
+        location = "/";
+        return;
+    }
+
+    document.getElementById("name").innerText = data.user.full_name;
+    document.getElementById("email").innerText = data.user.email;
+    document.getElementById("mobile").innerText = data.user.mobile;
+    document.getElementById("username").innerText = data.user.full_name;
+
+    loadAddresses();
+});
+
+async function loadAddresses() {
+    const res = await fetch("/user/address", { credentials:"include" });
+    const data = await res.json();
+
+    const box = document.getElementById("addresses");
+    box.innerHTML = "";
+
+    ["address1","address2","address3"].forEach(slot=>{
+        box.innerHTML += `
+        <div class="box">
+            <b><i class="fa-solid fa-location-dot"></i> ${slot.toUpperCase()}</b>
+            <textarea id="${slot}" placeholder="Enter ${slot}...">${data[slot] || ""}</textarea>
+
+            <div class="actions">
+                <button class="save" onclick="saveAddress('${slot}')">
+                    <i class="fa-solid fa-check"></i> Save
+                </button>
+                ${data[slot] ? `
+                <button class="delete" onclick="deleteAddress('${slot}')">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </button>` : ""}
+            </div>
+        </div>
+        `;
+    });
+}
+
+async function saveAddress(slot){
+    const address = document.getElementById(slot).value.trim();
+    if(!address || address.length < 5){
+        alert("Address must be at least 5 characters");
+        return;
+    }
+
+    const res = await fetch("/user/address/"+slot,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        credentials:"include",
+        body:JSON.stringify({ address })
+    });
+
+    const data = await res.json();
+    alert(data.message || "Address saved");
+    loadAddresses();
+}
+
+async function deleteAddress(slot){
+    if(!confirm("Delete this address?")) return;
+
+    await fetch("/user/address/"+slot,{
+        method:"DELETE",
+        credentials:"include"
+    });
+
+    loadAddresses();
+}
+</script>
+
+</body>
+</html>

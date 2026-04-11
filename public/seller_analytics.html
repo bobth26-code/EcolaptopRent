@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Analytics</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        /* ===== RESET ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f1f5f9;
+            transition: .3s;
+
+        }
+
+        /* DARK MODE */
+        body.dark {
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        /* ===== NAVBAR (SAME AS DASHBOARD) ===== */
+        .navbar {
+            width: 90%;
+            margin: 30px auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            background: #ffffff;
+            color: #111827;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: all 0.35s ease;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .navbar.scrolled {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            margin: 0;
+            border-radius: 0;
+            padding: 12px 30px;
+            /* slightly shrink */
+            background: #ffffff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+        }
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600&display=swap');
+
+
+
+        body.dark .navbar {
+            /* background: #111827; */
+            background: #1f2937;
+            color: #ffffff;
+        }
+
+        .seller-name {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .seller-icon {
+            color: #2563eb;
+            font-size: 18px;
+        }
+
+        /* After Scroll in Dark Mode */
+        body.dark .navbar.scrolled {
+            background: #0f172a;
+
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
+        }
+
+
+
+
+
+
+
+        .logo {
+            width: 55px;
+            border-radius: 10px;
+        }
+
+        .seller-name {
+            font-weight: 600;
+        }
+
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #1f2937;
+            color: #fff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .nav-btn.active {
+            background: #2563eb;
+        }
+
+
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            border: none;
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5);
+        }
+
+        .logout-btn:active {
+            transform: scale(0.96);
+        }
+
+        .logout-btn i {
+            margin-right: 6px;
+        }
+
+
+        /* ===== TOGGLE ===== */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Track */
+        .slider-track {
+            width: 70px;
+            height: 36px;
+            background: linear-gradient(135deg, #facc15, #f59e0b);
+            border-radius: 50px;
+            position: relative;
+            margin-left: 70px;
+            transition: 0.4s ease;
+            box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Thumb */
+        .slider-thumb {
+            width: 30px;
+            height: 30px;
+            background: #ffffff;
+            border-radius: 50%;
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.4s cubic-bezier(.4, 0, .2, 1);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Icon */
+        .slider-icon {
+            font-size: 14px;
+            color: #f59e0b;
+            transition: 0.3s ease;
+        }
+
+        .slider-thumb {
+            transition: 0.4s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .slider-thumb i {
+            transition: 0.4s ease;
+        }
+
+        body.dark .slider-thumb i {
+            transform: rotate(360deg);
+        }
+
+        /* 🌙 DARK MODE STYLE */
+        body.dark .slider-track {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+        }
+
+        body.dark .slider-thumb {
+            left: 37px;
+            background: #111827;
+        }
+
+        body.dark .slider-icon {
+            color: #60a5fa;
+        }
+
+
+        /* ===== CONTAINER ===== */
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        /* ===== ANALYTICS CARDS ===== */
+        .analytics-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .analytics-card {
+            background: #fff;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, .1);
+        }
+
+        body.dark .analytics-card {
+            background: #1e293b;
+        }
+
+        .analytics-card h3 {
+            margin-bottom: 10px;
+        }
+
+        .analytics-card p {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* ===== SALES CARDS ===== */
+        .sales-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 300px));
+            gap: 30px;
+            margin: 40px auto;
+            max-width: 1200px;
+            /* prevents full stretch */
+            justify-content: center;
+            /* center cards */
+            padding: 0 20px;
+        }
+
+        .main-content {
+            transition: 0.3s ease;
+        }
+
+        .navbar.scrolled+.main-content {
+            margin-top: 150px;
+            /* adjust based on navbar height */
+        }
+
+        .sales-card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, .1);
+            transition: .3s;
+        }
+
+
+        body.dark .sales-card {
+            background: #1e293b;
+        }
+
+        .sales-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .sales-card h3 {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .sales-card p {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        body.dark .sales-card p {
+            color: #60a5fa;
+        }
+
+        canvas {
+            margin-top: 20px;
+        }
+
+        .chart-container {
+            width: 100%;
+            max-width: 550px;
+            /* control width */
+            height: auto;
+            /* control height */
+            margin: 20px auto 40px auto;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .08);
+        }
+
+        body.dark .chart-container {
+            background: #1e293b;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+
+
+        body.dark .analytics-card p {
+            color: #60a5fa;
+        }
+
+
+        /* ===============================
+   LARGE DESKTOP (1400px+)
+================================= */
+        @media (min-width: 1400px) {
+
+            .container {
+                max-width: 1400px;
+            }
+
+            .sales-cards {
+                grid-template-columns: repeat(4, 280px);
+            }
+        }
+
+        /* ===============================
+   DESKTOP (1024px - 1399px)
+================================= */
+        @media (max-width: 1399px) {
+
+            .sales-cards {
+                grid-template-columns: repeat(auto-fit, minmax(260px, 280px));
+            }
+        }
+
+        /* ===============================
+   TABLET (768px - 1023px)
+================================= */
+        @media (max-width: 1023px) {
+
+            .navbar {
+                width: 95%;
+                padding: 15px 20px;
+            }
+
+            .nav-center {
+                gap: 8px;
+            }
+
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 14px;
+            }
+
+            .sales-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .chart-container {
+                max-width: 100%;
+            }
+        }
+
+        /* ===============================
+   MOBILE (480px - 767px)
+================================= */
+        @media (max-width: 767px) {
+
+            .navbar {
+                flex-direction: column;
+                gap: 12px;
+                padding: 15px;
+            }
+
+            .nav-center {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .nav-right {
+                justify-content: center;
+            }
+
+            .seller-name {
+                font-size: 16px;
+            }
+
+            .sales-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .sales-card {
+                padding: 20px;
+            }
+
+            .chart-container {
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 18px;
+            }
+        }
+
+        /* ===============================
+   SMALL DEVICES (≤360px)
+================================= */
+        @media (max-width: 360px) {
+
+            .navbar {
+                padding: 12px;
+            }
+
+            .nav-btn {
+                font-size: 12px;
+                padding: 5px 10px;
+            }
+
+            .logout-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .sales-card p {
+                font-size: 24px;
+            }
+
+            .seller-name {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+
+        fetch("/me", { credentials: "include" })
+            .then(r => r.json())
+            .then(d => {
+
+                if (!d.loggedIn || d.user.role !== "seller") {
+                    window.location.href = "index.html";
+                }
+
+            })
+            .catch(() => {
+                window.location.href = "index.html";
+            });
+
+    </script>
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+        <div class="nav-left">
+            <!-- <img src="logo.png" class="logo"> -->
+            <span class="seller-name">
+                <i class="fas fa-store seller-icon"></i>
+                <span id="sellerName"></span>
+            </span>
+        </div>
+
+       <div class="nav-center">
+
+<button class="nav-btn" onclick="location.href='seller_dashboard.html'">
+Products
+</button>
+
+<button class="nav-btn" onclick="location.href='seller_analytics.html'">
+Analytics
+</button>
+
+<button class="nav-btn" onclick="location.href='seller_orders.html'">
+Orders
+</button>
+
+</div>
+
+        <div class="nav-right">
+
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <div class="slider-track">
+                    <div class="slider-thumb">
+                        <i class="fas fa-sun slider-icon"></i>
+                    </div>
+                </div>
+            </button>
+
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="main-content">
+        <h2 align="center">📊 Sales Dashboard</h2>
+
+    </div>
+
+    <div class="sales-cards">
+
+        <div class="sales-card">
+            <h3>📦 Total Orders</h3>
+            <p id="totalOrders">0</p>
+        </div>
+
+        <div class="sales-card">
+            <h3>🛒 Today's Orders</h3>
+            <p id="todayOrders">0</p>
+        </div>
+
+        <div class="sales-card">
+            <h3>💰 Total Revenue</h3>
+            <p id="totalRevenue">₹0</p>
+        </div>
+
+        <div class="sales-card">
+            <h3>💸 Today's Revenue</h3>
+            <p id="todayRevenue">₹0</p>
+        </div>
+
+    </div>
+
+    <h2 style="margin-top:40px; text-align: center;">📊 Monthly Revenue</h2>
+    <div class="chart-container">
+        <canvas id="monthlyChart"></canvas>
+    </div>
+
+    <h2 style="margin-top:40px;">📈 Weekly Revenue</h2>
+    <div class="chart-container">
+        <canvas id="weeklyChart"></canvas>
+    </div>
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const sellerName = document.getElementById("sellerName");
+
+            const totalOrdersEl = document.getElementById("totalOrders");
+            const todayOrdersEl = document.getElementById("todayOrders");
+            const totalRevenueEl = document.getElementById("totalRevenue");
+            const todayRevenueEl = document.getElementById("todayRevenue");
+
+            let monthlyChart;
+            let weeklyChart;
+
+            /* ================= AUTH CHECK ================= */
+            fetch("/me", { credentials: "include" })
+                .then(r => r.json())
+                .then(d => {
+                    if (!d.loggedIn || d.user.role !== "seller") {
+                        location = "/";
+                        return;
+                    }
+                    sellerName.textContent = d.user.full_name;
+
+                });
+
+            /* ================= LOAD SALES ================= */
+            async function loadSales() {
+
+                try {
+                    const r = await fetch("/seller/analytics", {
+                        credentials: "include"
+                    });
+
+                    const d = await r.json();
+
+                    if (!d.success || !Array.isArray(d.orders)) {
+                        console.log("No orders found");
+                        return;
+                    }
+
+                    const orders = d.orders;
+
+                    let totalRevenue = 0;
+                    let todayRevenue = 0;
+                    let todayOrders = 0;
+
+                    const monthlyData = {};
+                    const weeklyData = {};
+
+                    const today = new Date().toLocaleDateString();
+
+                    totalOrdersEl.textContent = orders.length;
+
+                    orders.forEach(o => {
+
+                        const amount = Number(o.price) * Number(o.quantity);
+                        totalRevenue += amount;
+
+                        const orderDateObj = new Date(o.created_at);
+                        const orderDate = orderDateObj.toLocaleDateString();
+
+                        if (orderDate === today) {
+                            todayRevenue += amount;
+                            todayOrders++;
+                        }
+
+                        const month = orderDateObj.toLocaleString("default", { month: "short" });
+                        monthlyData[month] = (monthlyData[month] || 0) + amount;
+
+                        const day = orderDateObj.toLocaleString("default", { weekday: "short" });
+                        weeklyData[day] = (weeklyData[day] || 0) + amount;
+                    });
+
+                    totalRevenueEl.textContent = "₹" + totalRevenue;
+                    todayRevenueEl.textContent = "₹" + todayRevenue;
+                    todayOrdersEl.textContent = todayOrders;
+
+                    createMonthlyBarChart(monthlyData);
+                    createWeeklyPieChart(weeklyData);
+
+                } catch (err) {
+                    console.error("Analytics error:", err);
+                }
+            }
+
+            /* ================= BAR CHART (MONTHLY) ================= */
+            function createMonthlyBarChart(data) {
+
+                if (monthlyChart) monthlyChart.destroy();
+
+                monthlyChart = new Chart(
+                    document.getElementById("monthlyChart"),
+                    {
+                        type: "bar",
+                        data: {
+                            labels: Object.keys(data),
+                            datasets: [{
+                                label: "Monthly Revenue",
+                                data: Object.values(data),
+                                backgroundColor: [
+                                    "#2563eb",
+                                    "#16a34a",
+                                    "#f59e0b",
+                                    "#dc2626",
+                                    "#9333ea",
+                                    "#06b6d4"
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: { display: false }
+                            }
+                        }
+                    }
+                );
+            }
+
+            /* ================= PIE CHART (WEEKLY) ================= */
+            function createWeeklyPieChart(data) {
+
+                if (weeklyChart) weeklyChart.destroy();
+
+                weeklyChart = new Chart(
+                    document.getElementById("weeklyChart"),
+                    {
+                        type: "pie",
+                        data: {
+                            labels: Object.keys(data),
+                            datasets: [{
+                                data: Object.values(data),
+                                backgroundColor: [
+                                    "#2563eb",
+                                    "#16a34a",
+                                    "#f59e0b",
+                                    "#dc2626",
+                                    "#9333ea",
+                                    "#06b6d4",
+                                    "#14b8a6"
+                                ]
+                            }]
+                        },
+                        options: {
+                            responsive: true
+                        }
+                    }
+                );
+            }
+
+            /* ================= DARK MODE ================= */
+            const saved = localStorage.getItem("sellerTheme");
+            if (saved === "dark") {
+                document.body.classList.add("dark");
+            }
+
+            loadSales();
+        });
+
+        /* ================= TOGGLE ================= */
+        function toggleTheme() {
+            document.body.classList.toggle("dark");
+
+            const icon = document.querySelector(".slider-icon");
+
+            if (document.body.classList.contains("dark")) {
+                icon.classList.remove("fa-sun");
+                icon.classList.add("fa-moon");
+                localStorage.setItem("sellerTheme", "dark");
+            } else {
+                icon.classList.remove("fa-moon");
+                icon.classList.add("fa-sun");
+                localStorage.setItem("sellerTheme", "light");
+            }
+        }
+
+
+      function logout(){
+
+fetch("/logout",{credentials:"include"})
+.then(()=>{
+
+// prevent back button access
+window.history.replaceState(null,null,"/");
+
+// redirect to login
+window.location.href="/index.html";
+
+});
+
+}  /* ================= LOGOUT ================= */
+        function logout() {
+
+            fetch("/logout", {
+                method: "POST",
+                credentials: "include"
+            }).then(() => {
+                window.history.replaceState(null, null, "/");
+                window.location.href = "/";
+            });
+        }
+
+        /* Prevent back */
+        window.history.pushState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.go(1);
+        };
+
+        const navbar = document.querySelector(".navbar");
+
+        window.addEventListener("scroll", function () {
+
+            if (window.scrollY > 50) {
+                navbar.classList.add("scrolled");
+
+                // Push content down
+                document.body.style.paddingTop = navbar.offsetHeight + "px";
+            } else {
+                navbar.classList.remove("scrolled");
+
+                // Reset
+                document.body.style.paddingTop = "0px";
+            }
+
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const path = window.location.pathname;
+
+            const navButtons = document.querySelectorAll(".nav-btn");
+
+            navButtons.forEach(btn => {
+
+                const link = btn.getAttribute("onclick");
+
+                if (link && path.includes(link.replace("location.href='", "").replace("'", ""))) {
+                    btn.classList.add("active");
+                }
+
+            });
+
+        });
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>
