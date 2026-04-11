@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use(cors({
-    origin: `http://localhost:${PORT}`,
+    origin: process.env.FRONTEND_URL || "http://localhost:3000",
     credentials: true
 }));
 
@@ -116,6 +116,8 @@ function isUser(req, res, next) {
 
 
 /* ================= SESSION ================= */
+app.set("trust proxy", 1);
+
 app.use(session({
     name: "ecommerce.sid",
     secret: SESSION_SECRET,
@@ -123,7 +125,8 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        sameSite: "lax",
+        secure: true,
+        sameSite: "none",
         maxAge: 1000 * 60 * 60 * 24
     }
 }));
@@ -133,13 +136,15 @@ app.use(express.static(path.join(__dirname, "public")));
 
 /* ================= DATABASE ================= */
 const db = mysql.createPool({
-    host: process.env.DB_HOST || "localhost",
-    user: process.env.DB_USER || "root",
-    password: process.env.DB_PASS || "",
-    database: process.env.DB_NAME || "Ecommerce",
-    connectionLimit: 10
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASS,
+    database: process.env.DB_NAME,
+    connectionLimit: 10,
+    ssl: {
+        rejectUnauthorized: false
+    }
 });
-
 db.getConnection((err, conn) => {
     if (err) {
         console.error("❌ DB CONNECTION ERROR:", err.message);
