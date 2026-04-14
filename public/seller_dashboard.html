@@ -452,7 +452,7 @@ color:#f3f4f6;
         </div>
         <div class="nav-center">
 
-            <button class=" nav-btn" href="seller_dashboard.html">
+            <button class=" nav-btn" href='seller_dashboard.html'">
                 Products
             </button>
 
@@ -951,10 +951,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <p>${p.description}</p>
 <p><b>Category:</b> ${p.category}</p>
 ₹${p.price} | Stock ${p.stock}
-<div class="product-actions">
-<button class="btn-edit" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
-<button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
-</div>
 </div>
 `);
     }
@@ -1008,19 +1004,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         loadProducts();
     }
-
-    /* ================= EDIT ================= */
-
-    window.editProduct = function (p) {
-        document.getElementById("productId").value = p.id;
-        document.getElementById("name").value = p.name;
-        document.getElementById("description").value = p.description;
-        document.getElementById("category").value = p.category;
-        document.getElementById("price").value = p.price;
-        document.getElementById("stock").value = p.stock;
-        document.getElementById("image").value = p.image;
-        window.scrollTo(0, 0);
-    };
 
     /* ================= DARK MODE LOAD ================= */
 
