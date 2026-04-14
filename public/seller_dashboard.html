@@ -1009,6 +1009,19 @@ document.addEventListener("DOMContentLoaded", () => {
         loadProducts();
     }
 
+    /* ================= EDIT ================= */
+
+    window.editProduct = function (p) {
+        document.getElementById("productId").value = p.id;
+        document.getElementById("name").value = p.name;
+        document.getElementById("description").value = p.description;
+        document.getElementById("category").value = p.category;
+        document.getElementById("price").value = p.price;
+        document.getElementById("stock").value = p.stock;
+        document.getElementById("image").value = p.image;
+        window.scrollTo(0, 0);
+    };
+
     /* ================= DARK MODE LOAD ================= */
 
     const saved = localStorage.getItem("sellerTheme");
