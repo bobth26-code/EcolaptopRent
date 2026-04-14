@@ -623,7 +623,7 @@ Delete
 
             };
 
-            /* ================= EDIT ================= */
+            /* ====*============= EDIT ================= */
 
             window.editProduct = function (p) {
 
@@ -762,7 +762,7 @@ Delete
     </script> -->
 
 
-
+<!-- 
     <script>
 
 const BASE_URL = "https://ecolaptoprent.onrender.com";
@@ -883,7 +883,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadProducts();
 
-};
+});
 
 /* ================= LOGOUT ================= */
 
@@ -893,6 +893,166 @@ function logout() {
             window.location.href = "/index.html";
         });
 }
+</script> -->
+
+<script>
+
+const BASE_URL = "https://ecolaptoprent.onrender.com";
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* ================= AUTH CHECK ================= */
+
+    fetch(BASE_URL + "/me", { credentials: "include" })
+        .then(r => r.json())
+        .then(d => {
+
+            if (!d.loggedIn || d.user.role !== "seller") {
+                location = "/";
+                return;
+            }
+
+            const sellerName = document.getElementById("sellerName");
+            if (sellerName) {
+                sellerName.textContent = d.user.full_name;
+            }
+
+        });
+
+    /* ================= LOAD PRODUCTS ================= */
+
+    async function loadProducts() {
+
+        const r = await fetch(BASE_URL + "/seller/products", {
+            credentials: "include"
+        });
+
+        const text = await r.text();
+
+        let d;
+        try {
+            d = JSON.parse(text);
+        } catch (e) {
+            console.error("❌ Not JSON:", text);
+            return;
+        }
+
+        const box = document.getElementById("productList");
+        box.innerHTML = "";
+
+        if (!d.success) {
+            box.innerHTML = "No products";
+            return;
+        }
+
+        d.products.forEach(p => box.innerHTML += `
+<div class="product-card">
+<img src="${p.image}">
+<h3>${p.name}</h3>
+<p>${p.description}</p>
+<p><b>Category:</b> ${p.category}</p>
+₹${p.price} | Stock ${p.stock}
+</div>
+`);
+    }
+
+    /* ================= SAVE PRODUCT ================= */
+
+    document.getElementById("productForm").onsubmit = async function (e) {
+
+        e.preventDefault();
+
+        const id = document.getElementById("productId").value;
+
+        const body = {
+            name: document.getElementById("name").value,
+            description: document.getElementById("description").value,
+            category: document.getElementById("category").value,
+            price: document.getElementById("price").value,
+            stock: document.getElementById("stock").value,
+            image: document.getElementById("image").value
+        };
+
+        const url = id
+            ? BASE_URL + "/seller/product/" + id
+            : BASE_URL + "/seller/product";
+
+        const method = id ? "PUT" : "POST";
+
+        await fetch(url, {
+            method,
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify(body)
+        });
+
+        this.reset();
+        document.getElementById("productId").value = "";
+
+        loadProducts();
+    };
+
+    /* ================= DELETE ================= */
+
+    window.deleteProduct = async function (id) {
+
+        if (!confirm("Delete product?")) return;
+
+        await fetch(BASE_URL + "/seller/product/" + id, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        loadProducts();
+    }
+
+    /* ================= DARK MODE LOAD ================= */
+
+    const saved = localStorage.getItem("sellerTheme");
+
+    if (saved === "dark") {
+        document.body.classList.add("dark");
+
+        const icon = document.querySelector(".slider-icon");
+        if (icon) {
+            icon.classList.remove("fa-sun");
+            icon.classList.add("fa-moon");
+        }
+    }
+
+    /* ================= INIT ================= */
+
+    loadProducts();
+
+});
+
+/* ================= TOGGLE THEME ================= */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("dark");
+
+    const icon = document.querySelector(".slider-icon");
+
+    if (document.body.classList.contains("dark")) {
+        icon.classList.remove("fa-sun");
+        icon.classList.add("fa-moon");
+        localStorage.setItem("sellerTheme", "dark");
+    } else {
+        icon.classList.remove("fa-moon");
+        icon.classList.add("fa-sun");
+        localStorage.setItem("sellerTheme", "light");
+    }
+}
+
+/* ================= LOGOUT ================= */
+
+function logout() {
+    fetch(BASE_URL + "/logout", { credentials: "include" })
+        .then(() => {
+            window.location.href = "/index.html";
+        });
+}
+
 </script>
 </body>
 
