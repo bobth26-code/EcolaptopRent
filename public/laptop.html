@@ -2,152 +2,150 @@
 <html>
 
 <head>
-<title>Laptops</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laptops</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+    <style>
+        body {
+            font-family: Segoe UI;
+            background: #f1f5f9;
+            margin: 0;
+        }
 
-body{
-font-family:Segoe UI;
-background:#f1f5f9;
-margin:0;
-}
+        .navbar {
+            width: 90%;
+            margin: 30px auto;
+            background: #fff;
+            padding: 15px 30px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-.navbar{
-width:90%;
-margin:30px auto;
-background:#fff;
-padding:15px 30px;
-border-radius:20px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
 
-.nav-links{
-display:flex;
-gap:25px;
-}
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
 
-.nav-links a{
-text-decoration:none;
-color:#333;
-font-weight:500;
-}
+        .search {
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+        }
 
-.search{
-padding:8px 15px;
-border-radius:20px;
-border:1px solid #ddd;
-}
+        /* PRODUCTS */
 
-/* PRODUCTS */
+        .container {
+            width: 90%;
+            margin: auto;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
 
-.container{
-width:90%;
-margin:auto;
-display:flex;
-gap:30px;
-flex-wrap:wrap;
-}
+        .card {
+            width: 260px;
+            background: #fff;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
 
-.card{
-width:260px;
-background:#fff;
-border-radius:18px;
-padding:20px;
-box-shadow:0 8px 20px rgba(0,0,0,0.1);
-}
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: contain;
+        }
 
-.card img{
-width:100%;
-height:160px;
-object-fit:contain;
-}
+        .price {
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
 
-.price{
-font-weight:bold;
-margin-bottom:15px;
-}
+        .cart-btn {
+            width: 100%;
+            background: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
 
-.cart-btn{
-width:100%;
-background:#2563eb;
-color:#fff;
-border:none;
-padding:10px;
-border-radius:8px;
-cursor:pointer;
-}
-
-.cart-btn:hover{
-background:#1e40af;
-}
-
-</style>
+        .cart-btn:hover {
+            background: #1e40af;
+        }
+    </style>
 </head>
 
 <body>
-<script>
+    <script>
 
-fetch("/me", { credentials: "include" })
-.then(r => r.json())
-.then(d => {
+        fetch("/me", { credentials: "include" })
+            .then(r => r.json())
+            .then(d => {
 
-    if (!d.loggedIn || d.user.role !== "user") {
-        window.location.href = "index.html";
-    }
+                if (!d.loggedIn || d.user.role !== "user") {
+                    window.location.href = "index.html";
+                }
 
-})
-.catch(() => {
-    window.location.href = "index.html";
-});
+            })
+            .catch(() => {
+                window.location.href = "index.html";
+            });
 
-</script>
-<!-- NAVBAR -->
+    </script>
+    <!-- NAVBAR -->
 
-<div class="navbar">
+    <div class="navbar">
 
-<div class="nav-links">
+        <div class="nav-links">
 
-<a href="homepage.html">Home</a>
-<a href="laptop.html"><b>Laptop</b></a>
-<a href="monitor.html">Monitors</a>
-<a href="keyboard.html">Keyboard</a>
-<a href="projector.html">Projector</a>
+            <a href="homepage.html">Home</a>
+            <a href="laptop.html"><b>Laptop</b></a>
+            <a href="monitor.html">Monitors</a>
+            <a href="keyboard.html">Keyboard</a>
+            <a href="projector.html">Projector</a>
 
-</div>
+        </div>
 
-<input class="search" placeholder="Search laptop...">
+        <input class="search" placeholder="Search laptop...">
 
-</div>
+    </div>
 
-<!-- PRODUCTS -->
+    <!-- PRODUCTS -->
 
-<div class="container" id="products"></div>
+    <div class="container" id="products"></div>
 
-<script>
+    <script>
 
-/* LOAD LAPTOP PRODUCTS */
+        /* LOAD LAPTOP PRODUCTS */
 
-async function loadLaptops(){
+        async function loadLaptops() {
 
-const res = await fetch("/laptops");
-const data = await res.json();
+            const res = await fetch("/laptops");
+            const data = await res.json();
 
-const box = document.getElementById("products");
+            const box = document.getElementById("products");
 
-box.innerHTML="";
+            box.innerHTML = "";
 
-if(!data.success || data.products.length === 0){
-box.innerHTML = "<p>No laptops available</p>";
-return;
-}
+            if (!data.success || data.products.length === 0) {
+                box.innerHTML = "<p>No laptops available</p>";
+                return;
+            }
 
-data.products.forEach(p => {
+            data.products.forEach(p => {
 
-box.innerHTML += `
+                box.innerHTML += `
 <div class="card">
 
 <img src="${p.image}">
@@ -165,38 +163,39 @@ box.innerHTML += `
 </div>
 `;
 
-});
+            });
 
-}
-
-
-/* ADD TO CART */
-
-async function addToCart(id){
-
-const res = await fetch("/cart",{
-method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
-credentials:"include",
-body:JSON.stringify({product_id:id})
-});
-
-const data = await res.json();
-
-if(data.success){
-alert("Added to cart");
-}
-
-}
+        }
 
 
-/* INIT */
+        /* ADD TO CART */
 
-loadLaptops();
+        async function addToCart(id) {
 
-</script>
+            const res = await fetch("/cart", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "include",
+                body: JSON.stringify({ product_id: id })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                alert("Added to cart");
+            }
+
+        }
+
+
+        /* INIT */
+
+        loadLaptops();
+
+    </script>
 
 </body>
+
 </html>

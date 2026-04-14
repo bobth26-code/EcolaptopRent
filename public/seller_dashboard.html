@@ -951,6 +951,10 @@ document.addEventListener("DOMContentLoaded", () => {
 <p>${p.description}</p>
 <p><b>Category:</b> ${p.category}</p>
 ₹${p.price} | Stock ${p.stock}
+<div class="product-actions">
+<button class="btn-edit" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+<button class="btn-delete" onclick="deleteProduct(${p.id})">Delete</button>
+</div>
 </div>
 `);
     }
