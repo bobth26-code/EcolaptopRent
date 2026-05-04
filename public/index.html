@@ -324,6 +324,152 @@
             font-size: 14px;
             color: #666;
         }
+
+        /* ================= RESPONSIVE ================= */
+        .nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #333;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 960px) {
+            .navbar {
+                width: 100%;
+                margin: 0;
+                padding: 15px 20px;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .nav-toggle {
+                display: inline-flex;
+            }
+
+            .nav-links {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #fff;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 20px;
+                gap: 10px;
+                display: none;
+                border-bottom-left-radius: 15px;
+                border-bottom-right-radius: 15px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                width: 100%;
+                border-bottom: 1px solid #eee;
+            }
+
+            .nav-links li:last-child {
+                border-bottom: none;
+            }
+
+            .nav-links a {
+                width: 100%;
+                padding: 12px 0;
+                font-size: 16px;
+            }
+
+            .nav-right {
+                width: 100%;
+                justify-content: flex-end;
+                order: 3;
+            }
+
+            .hero {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 30px 20px;
+            }
+
+            .hero-text h1 {
+                font-size: 32px;
+            }
+
+            .hero-text p {
+                font-size: 15px;
+                max-width: 100%;
+                margin: 0 auto 20px auto;
+            }
+
+            .hero img {
+                width: 100%;
+                max-width: 340px;
+            }
+
+            .section,
+            .stats-wrapper,
+            .experience {
+                width: 94%;
+                margin: 25px auto;
+            }
+
+            .products {
+                flex-direction: column;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .stats-section {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .feature {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .navbar {
+                padding: 12px 16px;
+            }
+
+            .hero {
+                padding: 24px 16px;
+            }
+
+            .hero-text h1 {
+                font-size: 28px;
+            }
+
+            .hero button {
+                width: 100%;
+            }
+
+            .card img {
+                width: 120px;
+                height: 120px;
+            }
+
+            .stat-number {
+                font-size: 32px;
+            }
+
+            .feature i {
+                font-size: 28px;
+            }
+        }
     </style>
 </head>
 
@@ -332,6 +478,9 @@
     <!-- ================= NAVBAR ================= -->
     <div class="navbar">
         <div class="logo">EcolaptopRent</div>
+        <button class="nav-toggle" aria-label="Toggle navigation">
+            <i class="fa-solid fa-bars"></i>
+        </button>
 
         <ul class="nav-links">
             <li><a href="login.html">Home</a></li>
@@ -356,11 +505,11 @@
         <div class="hero-text">
             <h1>MEET THE NEW TECHNOLOGY<br>For Everyone</h1>
             <p>Level up your work</p>
-            <a href="/"> <button>Shop Now</button< /a>
+            <a href="/"><button>Shop Now</button></a>
 
         </div>
 
-        <img src="https://cdn.mos.cms.futurecdn.net/pyL3b8cis5dcmUvgbe9ygV-2000-80.jpg"Family Fashion">
+        <img src="https://cdn.mos.cms.futurecdn.net/pyL3b8cis5dcmUvgbe9ygV-2000-80.jpg" alt="Laptop on desk">
     </div>
 
     <!-- ================= SHOP SECTION 1 ================= -->
@@ -496,6 +645,13 @@
                 navbar.classList.remove("scrolled");
                 document.body.style.paddingTop = "0px";
             }
+        });
+
+        const navToggle = document.querySelector(".nav-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        navToggle?.addEventListener("click", () => {
+            navLinks.classList.toggle("active");
         });
 
 
