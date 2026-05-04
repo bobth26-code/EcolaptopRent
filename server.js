@@ -134,6 +134,11 @@ app.use(session({
 /* ================= STATIC FILES ================= */
 app.use(express.static(path.join(__dirname, "public")));
 
+// Favicon middleware
+app.get('/favicon.ico', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/favicon/favicon_io/favicon.ico'));
+});
+
 /* ================= DATABASE ================= */
 const db = mysql.createPool({
     host: process.env.DB_HOST,
